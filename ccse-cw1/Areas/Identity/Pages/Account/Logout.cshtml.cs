@@ -16,28 +16,22 @@ namespace ccse_cw1.Areas.Identity.Pages.Account
     public class LogoutModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
-        private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<User> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(SignInManager<User> signInManager)
         {
             _signInManager = signInManager;
-            _logger = logger;
         }
-
-        public async Task<IActionResult> OnPost(string returnUrl = null)
+            
+        public async Task<IActionResult> OnGet()
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
-            if (returnUrl != null)
-            {
-                return LocalRedirect(returnUrl);
-            }
-            else
-            {
-                // This needs to be a redirect so that the browser performs a new
-                // request and the identity for the user gets updated.
-                return RedirectToPage();
-            }
+            return LocalRedirect("/");
+        }
+
+        public async Task<IActionResult> OnPost()
+        {
+            await _signInManager.SignOutAsync();
+            return LocalRedirect("/");
         }
     }
 }
