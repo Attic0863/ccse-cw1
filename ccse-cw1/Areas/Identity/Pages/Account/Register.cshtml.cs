@@ -134,8 +134,7 @@ namespace ccse_cw1.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                //var user = CreateUser();
-
+                var uuid = Guid.NewGuid().ToString();
                 var user = new User()
                 {
                     FirstName = Input.FirstName,
@@ -145,6 +144,7 @@ namespace ccse_cw1.Areas.Identity.Pages.Account
                     PhoneNumber = Input.PhoneNumber,
                     Address = Input.Address,
                     PassportNo = Input.PassportNo,
+                    CustomerNo = uuid,
                     RegistrationDate = DateTime.Now,
                 };
 
