@@ -21,6 +21,8 @@ namespace ccse_cw1.Models
 
 		public string CustomerNo { get; set; }
 
+		public string PassportNo { get; set; }
+
 		[Required]
 		[DataType(DataType.Date)]
 		public DateTime RegistrationDate { get; set; }
