@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace ccse_cw1.Models
 {
-	public class User
+	public class User : IdentityUser
 	{
 		[Required]
 		public int Id { get; set; }
-
 
 		[Required]
 		public string FullName { get; set; }
