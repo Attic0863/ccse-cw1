@@ -100,8 +100,8 @@ namespace ccse_cw1.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            [DataType(DataType.PhoneNumber)]
             [Display(Name = "Phone Number")]
+            [DataType(DataType.PhoneNumber)]
             public string PhoneNumber { get; set; }
 
             [DataType(DataType.Text)]
@@ -112,6 +112,7 @@ namespace ccse_cw1.Areas.Identity.Pages.Account
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
+            [StringLength(16, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Text)]
             [Display(Name = "Passport Number")]
             public string PassportNo { get; set; }
