@@ -12,7 +12,7 @@ using ccse_cw1.Services;
 namespace ccse_cw1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240112201334_SecondMigration")]
+    [Migration("20240112202958_SecondMigration")]
     partial class SecondMigration
     {
         /// <inheritdoc />
@@ -54,19 +54,19 @@ namespace ccse_cw1.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b3fbd1e0-e08b-4c99-91e1-61e59d30000b",
+                            Id = "94718124-3692-4851-aba7-4a79c3228adc",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "3157c783-5d2f-4370-9f05-6eda3772ae20",
+                            Id = "311481e4-fa1f-4481-9b0a-7e2d0647b05c",
                             Name = "client",
                             NormalizedName = "client"
                         },
                         new
                         {
-                            Id = "d27de29e-fc62-4902-be13-a10d625beee7",
+                            Id = "321cbf11-c1ce-4ee8-8378-730da675c60f",
                             Name = "seller",
                             NormalizedName = "seller"
                         });
@@ -191,25 +191,25 @@ namespace ccse_cw1.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CustomerNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -227,15 +227,7 @@ namespace ccse_cw1.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("PassportNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")

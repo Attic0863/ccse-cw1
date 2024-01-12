@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ccse_cw1.Services;
 
@@ -11,9 +12,11 @@ using ccse_cw1.Services;
 namespace ccse_cw1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240112202820_FirstMigration")]
+    partial class FirstMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,19 +54,19 @@ namespace ccse_cw1.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "94718124-3692-4851-aba7-4a79c3228adc",
+                            Id = "770aae6b-29fd-41db-82ac-dd9853d0e47b",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "311481e4-fa1f-4481-9b0a-7e2d0647b05c",
+                            Id = "c2c990dc-7f7d-4e19-ab8b-94b0d1a6847c",
                             Name = "client",
                             NormalizedName = "client"
                         },
                         new
                         {
-                            Id = "321cbf11-c1ce-4ee8-8378-730da675c60f",
+                            Id = "fa5daf70-ddc8-4c8f-82b0-ab02ec404c8f",
                             Name = "seller",
                             NormalizedName = "seller"
                         });

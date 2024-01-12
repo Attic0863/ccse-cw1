@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ccse_cw1.Migrations
 {
     /// <inheritdoc />
-    public partial class SecondMigration : Migration
+    public partial class FirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,15 +32,13 @@ namespace ccse_cw1.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    PhoneNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PassportNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -169,9 +167,9 @@ namespace ccse_cw1.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3157c783-5d2f-4370-9f05-6eda3772ae20", null, "client", "client" },
-                    { "b3fbd1e0-e08b-4c99-91e1-61e59d30000b", null, "admin", "admin" },
-                    { "d27de29e-fc62-4902-be13-a10d625beee7", null, "seller", "seller" }
+                    { "770aae6b-29fd-41db-82ac-dd9853d0e47b", null, "admin", "admin" },
+                    { "c2c990dc-7f7d-4e19-ab8b-94b0d1a6847c", null, "client", "client" },
+                    { "fa5daf70-ddc8-4c8f-82b0-ab02ec404c8f", null, "seller", "seller" }
                 });
 
             migrationBuilder.CreateIndex(
