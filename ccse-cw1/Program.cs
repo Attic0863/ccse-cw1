@@ -1,6 +1,7 @@
 using ccse_cw1.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using ccse_cw1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
