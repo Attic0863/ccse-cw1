@@ -20,17 +20,17 @@ namespace ccse_cw1.Services
 				NormalizedName = "admin"
 			};
 
-			var client = new IdentityRole("client")
+			var customer = new IdentityRole("customer")
 			{
-				NormalizedName = "client"
+				NormalizedName = "customer"
+            };
+
+			var manager = new IdentityRole("manager")
+			{
+				NormalizedName = "manager"
 			};
 
-			var seller = new IdentityRole("seller")
-			{
-				NormalizedName = "seller"
-			};
-
-			builder.Entity<IdentityRole>().HasData(admin, client, seller);
+			builder.Entity<IdentityRole>().HasData(admin, customer, manager);
 		}
 	}
 }
