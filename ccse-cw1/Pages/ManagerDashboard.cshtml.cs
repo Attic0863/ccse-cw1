@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ccse_cw1.Pages
 {
-	[Authorize(Roles = "manager")]
+	[Authorize(Roles = "manager,admin")]
 	public class ManagerDashboardModel : PageModel
     {
         public void OnGet()
