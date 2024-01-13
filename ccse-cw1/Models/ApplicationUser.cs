@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ccse_cw1.Models
 {
-	public class User : IdentityUser // Id and other fields are inherited from IdentityUser
+	public class ApplicationUser : IdentityUser // Id and other fields are inherited from IdentityUser
     {
         [Required]
         public string FirstName { get; set; } = "";

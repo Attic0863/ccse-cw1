@@ -15,9 +15,9 @@ namespace ccse_cw1.Areas.Identity.Pages.Account
 {
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public LogoutModel(SignInManager<User> signInManager)
+        public LogoutModel(SignInManager<ApplicationUser> signInManager)
         {
             _signInManager = signInManager;
         }
