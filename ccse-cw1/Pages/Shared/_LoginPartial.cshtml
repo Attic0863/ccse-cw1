@@ -5,23 +5,69 @@
 @inject UserManager<User> UserManager
 
 <ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Hello @UserManager.GetUserName(User)!</a>
-        <ul class="dropdown-menu">
-                <li>
-                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
-                </li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li>
-                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
-                </li>
-            </ul>
-    </li>
-}
+    @if (SignInManager.IsSignedIn(User))
+    {
+        if (User.IsInRole("admin"))
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin: @UserManager.GetUserName(User)</a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/AdminDashboard">Admin</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/ManagerDashboard">Management</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
+                    </li>
+                </ul>
+            </li>
+        }
+        else if (User.IsInRole("manager"))
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Manager: @UserManager.GetUserName(User)</a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/ManagerDashboard">Management</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
+                    </li>
+                </ul>
+            </li>
+        } //else if (User.IsInRole("customer"))
+        else
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Hello @UserManager.GetUserName(User)!</a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
+                    </li>
+                </ul>
+            </li>
+        }
+    }
 else
 {
     <li class="nav-item">
