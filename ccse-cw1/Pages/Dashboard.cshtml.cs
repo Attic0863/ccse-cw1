@@ -9,9 +9,9 @@ namespace ccse_cw1.Pages
     [Authorize]
     public class DashboardModel : PageModel
     {
-		private readonly UserManager<User> _userManager;
-		public User? appUser;
-		public DashboardModel(UserManager<User> userManager)
+		private readonly UserManager<ApplicationUser> _userManager;
+		public ApplicationUser? appUser;
+		public DashboardModel(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
