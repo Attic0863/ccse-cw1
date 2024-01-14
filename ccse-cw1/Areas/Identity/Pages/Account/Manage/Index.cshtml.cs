@@ -61,10 +61,23 @@ namespace ccse_cw1.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
         }
 
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string address { get; set; }
+        public string customerNumber { get; set; }
+        public string passportnumber { get; set; }
+
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+
+            // new additions
+            firstName = user.FirstName;
+            lastName = user.LastName;
+            address = user.Address;
+            customerNumber = user.CustomerNo;
+            passportnumber = user.PassportNo;
 
             Username = userName;
 
