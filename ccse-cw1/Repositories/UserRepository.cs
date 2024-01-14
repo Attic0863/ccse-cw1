@@ -22,5 +22,22 @@ namespace ccse_cw1.Repositories
             return user;
         }
 
+        public async Task<ApplicationUser> ModifyUserDetails(string userId, ApplicationUser modifiedUser)
+        {
+            var user = await GetUserOrThrow(userId);
+
+            user.FirstName = modifiedUser.FirstName;
+            user.LastName = modifiedUser.LastName;
+            user.Address = modifiedUser.Address;
+            user.PassportNo = modifiedUser.PassportNo;
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
+
+
     }
 }

@@ -4,9 +4,11 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using ccse_cw1.Models;
+using ccse_cw1.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,13 +17,16 @@ namespace ccse_cw1.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
+        private readonly UserRepository _userRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
         public IndexModel(
+            UserRepository userRepository,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
+            _userRepository = userRepository;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -59,31 +64,40 @@ namespace ccse_cw1.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
-        }
 
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        public string address { get; set; }
-        public string customerNumber { get; set; }
-        public string passportnumber { get; set; }
+
+            [Display(Name = "First Name")]
+            public string firstName { get; set; }
+
+            [Display(Name = "Last Name")]
+            public string lastName { get; set; }
+
+            [Display(Name = "Address")]
+            public string address { get; set; }
+
+            [Display(Name = "Customer Id")]
+            public string customerNumber { get; set; }
+
+            [StringLength(16, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Display(Name = "Passport Number")]
+            public string passportnumber { get; set; }
+        }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-            // new additions
-            firstName = user.FirstName;
-            lastName = user.LastName;
-            address = user.Address;
-            customerNumber = user.CustomerNo;
-            passportnumber = user.PassportNo;
-
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                address = user.Address,
+                customerNumber = user.CustomerNo,
+                passportnumber = user.PassportNo
             };
         }
 
@@ -111,6 +125,25 @@ namespace ccse_cw1.Areas.Identity.Pages.Account.Manage
             {
                 await LoadAsync(user);
                 return Page();
+            }
+
+            var modifiedUser = new ApplicationUser
+            {
+                FirstName = Input.firstName,
+                LastName = Input.lastName,
+                Address = Input.address,
+                CustomerNo = Input.customerNumber,
+                PassportNo = Input.passportnumber
+            };
+
+            try
+            {
+                await _userRepository.ModifyUserDetails(user.Id, modifiedUser);
+            }
+            catch
+            {
+                StatusMessage = "Unexpected error when trying to modify user";
+                return RedirectToPage();
             }
 
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
