@@ -1,4 +1,5 @@
-﻿using ccse_cw1.Models;
+﻿using ccse_cw1.Exceptions;
+using ccse_cw1.Models;
 using ccse_cw1.Services;
 using Microsoft.EntityFrameworkCore;
 
