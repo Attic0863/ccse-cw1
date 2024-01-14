@@ -1,4 +1,5 @@
-﻿using ccse_cw1.Models;
+﻿using ccse_cw1.Data;
+using ccse_cw1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -46,11 +47,6 @@ namespace ccse_cw1.Services
                 .WithOne(rb => rb.Booking)
                 .HasForeignKey(rb => rb.BookingId);
 
-            builder.Entity<Hotel>()
-                .HasMany(h => h.Rooms)
-                .WithOne(r => r.Hotel)
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.Entity<Room>()
                 .HasOne(r => r.Hotel)
                 .WithMany(h => h.Rooms)
@@ -78,6 +74,22 @@ namespace ccse_cw1.Services
                 .HasOne(tb => tb.Tour)
                 .WithMany(t => t.TourBookings)
                 .HasForeignKey(tb => tb.TourId);
+
+            foreach (var hotel in HotelSeedData.Hotels)
+            {
+                builder.Entity<Hotel>().HasData(hotel);
+            }
+
+            var tempId = 0;
+            foreach (var room in HotelSeedData.GenerateRooms())
+            {
+                tempId += 1;
+                room.Id = tempId;
+                builder.Entity<Room>().HasData(room);
+            }
+
         }
+
+
 	}
 }
