@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ccse_cw1.Models
 {
-    public class Room_Booking
+    public class Tour_Booking
     {
         [Key]
         public int Id { get; set; }
@@ -11,8 +11,8 @@ namespace ccse_cw1.Models
         [ForeignKey("Booking")]
         public int BookingId { get; set; }
 
-        [ForeignKey("Room")]
-        public int RoomId { get; set; }
+        [ForeignKey("Tour")]
+        public int TourId { get; set; }
 
         [Required]
         public DateTime CheckInDate { get; set; }
@@ -20,8 +20,8 @@ namespace ccse_cw1.Models
         [Required]
         public DateTime CheckOutDate { get; set; }
 
-        public required Booking Booking { get; set; }
+        public required Room Booking { get; set; }
 
-        public required Room Room { get; set; }
+        public required Tour Tour { get; set; }
     }
 }

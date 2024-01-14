@@ -8,8 +8,9 @@ namespace ccse_cw1.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public string RoomType { get; set; }
+        public required string RoomType { get; set; }
+
+        public int Price { get; set; }
 
         [ForeignKey("Room_Booking")]
         public int RoomBookingId { get; set; }
@@ -17,8 +18,7 @@ namespace ccse_cw1.Models
         [ForeignKey("Hotel")]
         public int HotelId { get; set; }
 
-        [Required]
-        public Hotel Hotel { get; set; }
+        public required Hotel Hotel { get; set; }
 
         public ICollection<Room_Booking> RoomBookings { get; set; } = new List<Room_Booking>();
 

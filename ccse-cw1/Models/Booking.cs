@@ -15,13 +15,16 @@ namespace ccse_cw1.Models
         public bool Cancelled { get; set; }
 
         [ForeignKey("User")]
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
 
-        public required User User { get; set; }
+        [ForeignKey("Tour")]
+        public required string TourId { get; set; }
+
+        public required ApplicationUser User { get; set; }
 
         public ICollection<Room_Booking>? RoomBookings { get; set; }
 
-       // public Tour TourBooking { get; set; } TODO
+        public Tour_Booking? TourBooking { get; set; }
 
         public int TotalPrice { get; set; }
 
