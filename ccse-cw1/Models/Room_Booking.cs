@@ -6,6 +6,7 @@ namespace ccse_cw1.Models
     public class Room_Booking
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [ForeignKey("Booking")]

@@ -6,6 +6,7 @@ namespace ccse_cw1.Models
     public class Tour
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public required string Name { get; set; }

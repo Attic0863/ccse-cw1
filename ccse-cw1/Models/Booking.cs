@@ -6,6 +6,7 @@ namespace ccse_cw1.Models
     public class Booking
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         public DateTime BookingDate { get; set; }
@@ -17,13 +18,12 @@ namespace ccse_cw1.Models
         [ForeignKey("User")]
         public required string UserId { get; set; }
 
-        [ForeignKey("Tour")]
-        public required string TourId { get; set; }
-
         public required ApplicationUser User { get; set; }
 
         public ICollection<Room_Booking>? RoomBookings { get; set; }
 
+        [ForeignKey("Tour_Booking")]
+        public required string TourBookingId { get; set; }
         public Tour_Booking? TourBooking { get; set; }
 
         public int TotalPrice { get; set; }
