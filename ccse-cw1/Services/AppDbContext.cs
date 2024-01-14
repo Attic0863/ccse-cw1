@@ -60,12 +60,14 @@ namespace ccse_cw1.Services
             builder.Entity<Room_Booking>()
                 .HasOne(rb => rb.Room)
                 .WithMany(r => r.RoomBookings)
-                .HasForeignKey(rb => rb.RoomId);
+                .HasForeignKey(rb => rb.RoomId)
+                .IsRequired();
 
             builder.Entity<Room_Booking>()
                 .HasOne(rb => rb.Booking)
                 .WithMany(b => b.RoomBookings)
-                .HasForeignKey(rb => rb.BookingId);
+                .HasForeignKey(rb => rb.BookingId)
+                .IsRequired();
 
             builder.Entity<Tour>()
                 .HasMany(t => t.TourBookings)
