@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 
 namespace ccse_cw1.Services
 {
-	public class AppDbContext : IdentityDbContext<User>
+	public class AppDbContext : IdentityDbContext<ApplicationUser>
 	{
         public AppDbContext(DbContextOptions options) : base(options)
 		{
@@ -36,7 +36,7 @@ namespace ccse_cw1.Services
 			builder.Entity<IdentityRole>().HasData(admin, customer, manager);
 
             // Define relationships between the different entities, many to one, etc
-            builder.Entity<User>()
+            builder.Entity<ApplicationUser>()
                 .HasMany(u => u.Bookings)
                 .WithOne(b => b.User)
                 .HasForeignKey(b => b.UserId);
@@ -46,8 +46,36 @@ namespace ccse_cw1.Services
                 .WithOne(rb => rb.Booking)
                 .HasForeignKey(rb => rb.BookingId);
 
-         // TODO: possible add cascading deleting
+            builder.Entity<Hotel>()
+                .HasMany(h => h.Rooms)
+                .WithOne(r => r.Hotel)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Room>()
+                .HasOne(r => r.Hotel)
+                .WithMany(h => h.Rooms)
+                .HasForeignKey(r => r.HotelId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Room_Booking>()
+                .HasOne(rb => rb.Room)
+                .WithMany(r => r.RoomBookings)
+                .HasForeignKey(rb => rb.RoomId);
+
+            builder.Entity<Room_Booking>()
+                .HasOne(rb => rb.Booking)
+                .WithMany(b => b.RoomBookings)
+                .HasForeignKey(rb => rb.BookingId);
+
+            builder.Entity<Tour>()
+                .HasMany(t => t.TourBookings)
+                .WithOne(tb => tb.Tour)
+                .HasForeignKey(tb => tb.TourId);
+
+            builder.Entity<Tour_Booking>()
+                .HasOne(tb => tb.Tour)
+                .WithMany(t => t.TourBookings)
+                .HasForeignKey(tb => tb.TourId);
         }
 	}
 }
