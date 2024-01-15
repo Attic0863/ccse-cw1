@@ -6,7 +6,7 @@ namespace ccse_cw1.Models
     public class Room
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // autogenerate ids
         public int Id { get; set; }
 
         public required string RoomType { get; set; }
@@ -21,7 +21,7 @@ namespace ccse_cw1.Models
 
         public Hotel? Hotel { get; set; }
 
-        public ICollection<Room_Booking> RoomBookings { get; set; } = new List<Room_Booking>();
+        public ICollection<Room_Booking> RoomBookings { get; set; } = new List<Room_Booking>(); // navigator
 
         public bool IsAvailable(DateTime checkInDate, DateTime checkOutDate)
         {

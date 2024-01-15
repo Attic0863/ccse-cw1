@@ -6,7 +6,7 @@ namespace ccse_cw1.Models
     public class Tour
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // autogenerate ids
         public int Id { get; set; }
 
         public required string Name { get; set; }
@@ -23,6 +23,7 @@ namespace ccse_cw1.Models
 
         public ICollection<Tour_Booking> TourBookings { get; set; } = new List<Tour_Booking>();
 
+        // calculate if a tour is available
         public bool IsAvailable()
         { 
             if (TourBookings.Count >= MaxSpaces)

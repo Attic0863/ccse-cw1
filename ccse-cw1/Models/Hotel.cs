@@ -15,7 +15,7 @@ namespace ccse_cw1.Models
 
         public string? Description { get; set; }
 
-        public ICollection<Room> Rooms { get; set; } = new List<Room>();
+        public ICollection<Room> Rooms { get; set; } = new List<Room>(); // navigator
 
     }
 }
