@@ -12,13 +12,11 @@ namespace ccse_cw1.Models
         public required int Amount { get; set; }
 
         [ForeignKey("Room_Booking")]
-        public int RoomBookingId { get; set; }
+        public int? RoomBookingId { get; set; }
         public Room_Booking? RoomBooking { get; set; }
 
         [ForeignKey("Tour_Booking")]
-        public int TourBookingId { get; set; }
+        public int? TourBookingId { get; set; }
         public Tour_Booking? TourBooking { get; set; }
-
-        public required Booking Booking { get; set; }
     }
 }

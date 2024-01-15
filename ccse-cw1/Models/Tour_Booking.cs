@@ -22,5 +22,7 @@ namespace ccse_cw1.Models
         [ForeignKey("Tour")]
         public int TourId { get; set; }
         public required Tour Tour { get; set; }
+
+        public Discount? Discount { get; set; }
     }
 }
