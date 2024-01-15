@@ -17,6 +17,8 @@ namespace ccse_cw1.Models
 
         public required int Price { get; set; }
 
+        public required int Duration { get; set; }
+
         public required int MaxSpaces { get; set; }
 
         public ICollection<Tour_Booking> TourBookings { get; set; } = new List<Tour_Booking>();

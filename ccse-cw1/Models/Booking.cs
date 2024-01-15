@@ -26,6 +26,10 @@ namespace ccse_cw1.Models
         public required string TourBookingId { get; set; }
         public Tour_Booking? TourBooking { get; set; }
 
+        [ForeignKey("Discount")]
+        public required string DiscountId { get; set; }
+        public Discount? Discount { get; set; }
+
         public int TotalPrice { get; set; }
 
     }
