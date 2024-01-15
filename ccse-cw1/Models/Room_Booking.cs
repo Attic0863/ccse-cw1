@@ -19,7 +19,7 @@ namespace ccse_cw1.Models
 
         public required DateTime CheckOutDate { get; set; }
 
-        public required Booking Booking { get; set; }
+        public Booking? Booking { get; set; }
 
         public required Room Room { get; set; }
 
