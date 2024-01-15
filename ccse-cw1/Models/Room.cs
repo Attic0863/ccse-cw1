@@ -19,7 +19,7 @@ namespace ccse_cw1.Models
         [ForeignKey("Hotel")]
         public int HotelId { get; set; }
 
-        public Hotel Hotel { get; set; }
+        public Hotel? Hotel { get; set; }
 
         public ICollection<Room_Booking> RoomBookings { get; set; } = new List<Room_Booking>();
 
