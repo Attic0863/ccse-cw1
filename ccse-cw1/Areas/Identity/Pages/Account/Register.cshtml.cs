@@ -96,29 +96,35 @@ namespace ccse_cw1.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
+            [Required]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
             [Display(Name = "Phone Number")]
+            [Required]
             [DataType(DataType.PhoneNumber)]
             public string PhoneNumber { get; set; }
 
             [DataType(DataType.Text)]
+            [Required]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
             [DataType(DataType.Text)]
+            [Required]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
             [StringLength(16, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Text)]
+            [Required]
             [Display(Name = "Passport Number")]
             public string PassportNo { get; set; }
 
             [DataType(DataType.Text)]
             [Display(Name = "Address")]
+            [Required]
             public string Address { get; set; }
         }
 
