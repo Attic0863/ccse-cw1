@@ -12,19 +12,25 @@ namespace ccse_cw1.Pages
     {
 		private readonly UserManager<ApplicationUser> _userManager;
         private readonly UserRepository _userRepository;
+        private readonly BookingRepository _bookingRepository;
 
-		public ApplicationUser? appUser;
-		public DashboardModel(UserManager<ApplicationUser> userManager, UserRepository userRepository)
+        public ICollection<Booking>? bookings;
+
+		public DashboardModel(UserManager<ApplicationUser> userManager, UserRepository userRepository, BookingRepository bookingRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
+            _bookingRepository = bookingRepository;
         }
 
         public void OnGet()
         {
             var task = _userManager.GetUserAsync(User);
             task.Wait();
-            appUser = task.Result;
+
+            var user = task.Result;
+            if (user != null)
+                bookings = user.Bookings;
         }
     }
 }
