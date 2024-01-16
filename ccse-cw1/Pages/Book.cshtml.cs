@@ -11,34 +11,24 @@ namespace ccse_cw1.Pages
     [Authorize]
     public class BookModel : PageModel
     {
-        private readonly UserRepository _userRepository;
-        private readonly BookingRepository _bookingRepository;
-        private readonly HotelRepository _hotelRepository;
+        public List<Hotel>? Hotels { get; set; }
 
-        public List<Hotel> hotels { get; set; }
-
-        public ICollection<Room_Booking>? userroomBookings { get; set; }
-        public Tour_Booking? usertourBooking { get; set; }
-
-        public BookModel(UserRepository userRepository, BookingRepository bookingRepository, HotelRepository hotelRepository)
+        public BookModel()
         {
-            _userRepository = userRepository;
-            _bookingRepository = bookingRepository;
-            _hotelRepository = hotelRepository;
         }
 
+
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel? Input { get; set; }
 
         public class InputModel
         {
-            [Required]
-            public Booking booking { get; set; }
+            public required Booking booking { get; set; }
         }
 
         public async Task OnGetAsync()
         {
-            hotels = await _hotelRepository.GetHotelsOrThrowAsync();
+
 
         }
     }
