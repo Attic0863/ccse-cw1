@@ -13,15 +13,13 @@ namespace ccse_cw1.Pages
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly UserRepository _userRepository;
-        private readonly BookingRepository _bookingRepository;
 
         public ICollection<Booking>? bookings;
 
-        public DashboardModel(UserManager<ApplicationUser> userManager, UserRepository userRepository, BookingRepository bookingRepository)
+        public DashboardModel(UserManager<ApplicationUser> userManager, UserRepository userRepository)
         {
             _userManager = userManager;
             _userRepository = userRepository;
-            _bookingRepository = bookingRepository;
         }
         public void OnGet()
         {
