@@ -17,7 +17,7 @@ namespace ccse_cw1.Models
         public int? RoomBookingId { get; set; }
 
         [ForeignKey("Hotel")]
-        public int HotelId { get; set; }
+        public required int HotelId { get; set; }
 
         public Hotel? Hotel { get; set; }
 

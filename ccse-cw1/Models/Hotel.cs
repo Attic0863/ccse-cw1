@@ -6,7 +6,7 @@ namespace ccse_cw1.Models
     public class Hotel
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // autogenerate ids
         public int Id { get; set; }
 
         public required string Name { get; set; } = "";
