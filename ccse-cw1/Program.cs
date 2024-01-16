@@ -12,6 +12,7 @@ builder.Services.AddRazorPages();
 // add repositories to services
 builder.Services.AddTransient<UserRepository>();
 builder.Services.AddTransient<BookingRepository>();
+builder.Services.AddTransient<HotelRepository>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
