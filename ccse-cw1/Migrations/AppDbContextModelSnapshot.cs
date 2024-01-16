@@ -51,19 +51,19 @@ namespace ccse_cw1.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4fac1b74-a602-4484-80a5-b45d716be7bf",
+                            Id = "1b35b119-51a3-473b-93b3-87dd67ad38d8",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "918c24d8-3410-4d4f-b78d-a940e84afd60",
+                            Id = "415cc9ad-88f9-4780-9b08-1ff8f3637147",
                             Name = "customer",
                             NormalizedName = "customer"
                         },
                         new
                         {
-                            Id = "a6e29778-d00c-432e-9dae-447bd6248204",
+                            Id = "bed20bfa-f7b9-4b86-b452-35737bb9f826",
                             Name = "manager",
                             NormalizedName = "manager"
                         });
