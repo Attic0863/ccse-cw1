@@ -3,6 +3,7 @@ using ccse_cw1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace ccse_cw1.Services
 {
@@ -13,9 +14,9 @@ namespace ccse_cw1.Services
 
         public AppDbContext(DbContextOptions options) : base(options)
 		{
-            
         }
-		protected override void OnModelCreating(ModelBuilder builder)
+
+        protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
 
@@ -36,6 +37,7 @@ namespace ccse_cw1.Services
 				NormalizedName = "manager"
 			};
 
+            // seed roles to identityrole
 			builder.Entity<IdentityRole>().HasData(admin, customer, manager);
 
             // Define relationships between the different entities, many to one, etc
@@ -85,8 +87,14 @@ namespace ccse_cw1.Services
                 .WithMany(t => t.TourBookings)
                 .HasForeignKey(tb => tb.TourId);
 
+            builder.Entity<Hotel>()
+                .HasMany(h => h.Rooms)
+                .WithOne(r => r.Hotel)
+                .HasForeignKey(r => r.HotelId);
+
             foreach (var hotel in HotelSeedData.Hotels)
             {
+                hotel.Rooms = new List<Room>();
                 builder.Entity<Hotel>().HasData(hotel);
             }
 
