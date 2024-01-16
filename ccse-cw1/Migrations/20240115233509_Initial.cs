@@ -59,7 +59,7 @@ namespace ccse_cw1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hotel",
+                name: "Hotels",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -70,7 +70,7 @@ namespace ccse_cw1.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hotel", x => x.Id);
+                    table.PrimaryKey("PK_Hotels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,6 +83,7 @@ namespace ccse_cw1.Migrations
                     Operator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<int>(type: "int", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
                     MaxSpaces = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -206,7 +207,7 @@ namespace ccse_cw1.Migrations
                     Confirmed = table.Column<bool>(type: "bit", nullable: false),
                     Cancelled = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TourBookingId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TourBookingId = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -235,9 +236,9 @@ namespace ccse_cw1.Migrations
                 {
                     table.PrimaryKey("PK_Room", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Room_Hotel_HotelId",
+                        name: "FK_Room_Hotels_HotelId",
                         column: x => x.HotelId,
-                        principalTable: "Hotel",
+                        principalTable: "Hotels",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -298,18 +299,43 @@ namespace ccse_cw1.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Discount",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    RoomBookingId = table.Column<int>(type: "int", nullable: true),
+                    TourBookingId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Discount", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Discount_Room_Booking_RoomBookingId",
+                        column: x => x.RoomBookingId,
+                        principalTable: "Room_Booking",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Discount_Tour_Booking_TourBookingId",
+                        column: x => x.TourBookingId,
+                        principalTable: "Tour_Booking",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "2a58f273-2e3b-406d-b0d1-9ad9fb071c9a", null, "admin", "admin" },
-                    { "d3d392f7-be70-4228-af3d-4a12f2c18299", null, "customer", "customer" },
-                    { "f731f3fd-c1a1-4f53-9f0e-18d07832e31d", null, "manager", "manager" }
+                    { "4fac1b74-a602-4484-80a5-b45d716be7bf", null, "admin", "admin" },
+                    { "918c24d8-3410-4d4f-b78d-a940e84afd60", null, "customer", "customer" },
+                    { "a6e29778-d00c-432e-9dae-447bd6248204", null, "manager", "manager" }
                 });
 
             migrationBuilder.InsertData(
-                table: "Hotel",
+                table: "Hotels",
                 columns: new[] { "Id", "Description", "Name", "Operator" },
                 values: new object[,]
                 {
@@ -733,6 +759,20 @@ namespace ccse_cw1.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Discount_RoomBookingId",
+                table: "Discount",
+                column: "RoomBookingId",
+                unique: true,
+                filter: "[RoomBookingId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Discount_TourBookingId",
+                table: "Discount",
+                column: "TourBookingId",
+                unique: true,
+                filter: "[TourBookingId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Room_HotelId",
                 table: "Room",
                 column: "HotelId");
@@ -778,13 +818,16 @@ namespace ccse_cw1.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Discount");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "Room_Booking");
 
             migrationBuilder.DropTable(
                 name: "Tour_Booking");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Room");
@@ -796,7 +839,7 @@ namespace ccse_cw1.Migrations
                 name: "Tour");
 
             migrationBuilder.DropTable(
-                name: "Hotel");
+                name: "Hotels");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

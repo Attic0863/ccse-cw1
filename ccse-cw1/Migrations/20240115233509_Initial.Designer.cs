@@ -12,7 +12,7 @@ using ccse_cw1.Services;
 namespace ccse_cw1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240114204721_Initial")]
+    [Migration("20240115233509_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -54,19 +54,19 @@ namespace ccse_cw1.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "2a58f273-2e3b-406d-b0d1-9ad9fb071c9a",
+                            Id = "4fac1b74-a602-4484-80a5-b45d716be7bf",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "d3d392f7-be70-4228-af3d-4a12f2c18299",
+                            Id = "918c24d8-3410-4d4f-b78d-a940e84afd60",
                             Name = "customer",
                             NormalizedName = "customer"
                         },
                         new
                         {
-                            Id = "f731f3fd-c1a1-4f53-9f0e-18d07832e31d",
+                            Id = "a6e29778-d00c-432e-9dae-447bd6248204",
                             Name = "manager",
                             NormalizedName = "manager"
                         });
@@ -290,9 +290,8 @@ namespace ccse_cw1.Migrations
                     b.Property<int>("TotalPrice")
                         .HasColumnType("int");
 
-                    b.Property<string>("TourBookingId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TourBookingId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -303,6 +302,36 @@ namespace ccse_cw1.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Booking");
+                });
+
+            modelBuilder.Entity("ccse_cw1.Models.Discount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RoomBookingId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TourBookingId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomBookingId")
+                        .IsUnique()
+                        .HasFilter("[RoomBookingId] IS NOT NULL");
+
+                    b.HasIndex("TourBookingId")
+                        .IsUnique()
+                        .HasFilter("[TourBookingId] IS NOT NULL");
+
+                    b.ToTable("Discount");
                 });
 
             modelBuilder.Entity("ccse_cw1.Models.Hotel", b =>
@@ -326,7 +355,7 @@ namespace ccse_cw1.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Hotel");
+                    b.ToTable("Hotels");
 
                     b.HasData(
                         new
@@ -2957,6 +2986,9 @@ namespace ccse_cw1.Migrations
                     b.Property<int>("Description")
                         .HasColumnType("int");
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
                     b.Property<int>("MaxSpaces")
                         .HasColumnType("int");
 
@@ -3068,6 +3100,21 @@ namespace ccse_cw1.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ccse_cw1.Models.Discount", b =>
+                {
+                    b.HasOne("ccse_cw1.Models.Room_Booking", "RoomBooking")
+                        .WithOne("Discount")
+                        .HasForeignKey("ccse_cw1.Models.Discount", "RoomBookingId");
+
+                    b.HasOne("ccse_cw1.Models.Tour_Booking", "TourBooking")
+                        .WithOne("Discount")
+                        .HasForeignKey("ccse_cw1.Models.Discount", "TourBookingId");
+
+                    b.Navigation("RoomBooking");
+
+                    b.Navigation("TourBooking");
+                });
+
             modelBuilder.Entity("ccse_cw1.Models.Room", b =>
                 {
                     b.HasOne("ccse_cw1.Models.Hotel", "Hotel")
@@ -3139,9 +3186,19 @@ namespace ccse_cw1.Migrations
                     b.Navigation("RoomBookings");
                 });
 
+            modelBuilder.Entity("ccse_cw1.Models.Room_Booking", b =>
+                {
+                    b.Navigation("Discount");
+                });
+
             modelBuilder.Entity("ccse_cw1.Models.Tour", b =>
                 {
                     b.Navigation("TourBookings");
+                });
+
+            modelBuilder.Entity("ccse_cw1.Models.Tour_Booking", b =>
+                {
+                    b.Navigation("Discount");
                 });
 #pragma warning restore 612, 618
         }
