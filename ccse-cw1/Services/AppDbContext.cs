@@ -3,12 +3,14 @@ using ccse_cw1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace ccse_cw1.Services
 {
 	public class AppDbContext : IdentityDbContext<ApplicationUser>
 	{
+        public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Booking> Booking { get; set; }
+
         public AppDbContext(DbContextOptions options) : base(options)
 		{
             
@@ -97,7 +99,5 @@ namespace ccse_cw1.Services
             }
 
         }
-
-
 	}
 }
