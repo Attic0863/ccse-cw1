@@ -13,7 +13,7 @@ namespace ccse_cw1.Models
         public int BookingId { get; set; }
 
         [ForeignKey("Room")]
-        public int RoomId { get; set; }
+        public required int RoomId { get; set; }
 
         public required DateTime CheckInDate { get; set; }
 
@@ -22,7 +22,7 @@ namespace ccse_cw1.Models
         // navigators
         public Booking? Booking { get; set; }
 
-        public required Room Room { get; set; }
+        public Room? Room { get; set; }
 
         public Discount? Discount { get; set; }
     }

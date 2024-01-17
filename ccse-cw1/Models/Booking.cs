@@ -18,12 +18,12 @@ namespace ccse_cw1.Models
         [ForeignKey("User")]
         public required string UserId { get; set; }
 
-        public required ApplicationUser User { get; set; } // navigator
+        public ApplicationUser? User { get; set; } // navigator
 
         public ICollection<Room_Booking>? RoomBookings { get; set; } // navigator
 
         [ForeignKey("Tour_Booking")]
-        public required int TourBookingId { get; set; }
+        public int? TourBookingId { get; set; }
         public Tour_Booking? TourBooking { get; set; } // navigator
 
         public int TotalPrice { get; set; }
