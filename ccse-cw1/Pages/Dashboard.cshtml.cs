@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Build.Framework;
 using System.Runtime.Intrinsics.X86;
 
 namespace ccse_cw1.Pages
@@ -21,8 +22,9 @@ namespace ccse_cw1.Pages
             _userManager = userManager;
             _userRepository = userRepository;
         }
-        public void OnGet()
+        public async Task OnGetAsync()
         {
+            var user = await _userManager.GetUserAsync(User);
             // todo: get bookings from user or booking repo
         }
 

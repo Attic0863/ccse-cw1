@@ -11,6 +11,7 @@ namespace ccse_cw1.Services
 	{
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Booking> Booking { get; set; }
+        public DbSet<Room_Booking> RoomBooking { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
 		{
