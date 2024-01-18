@@ -11,9 +11,7 @@ namespace ccse_cw1.Models
 
         public required string Name { get; set; }
 
-        public required string Operator { get; set; }
-
-        public required int Description { get; set; }
+        public int Description { get; set; }
 
         public required int Price { get; set; }
 

@@ -12,6 +12,7 @@ namespace ccse_cw1.Services
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Booking> Booking { get; set; }
         public DbSet<Room_Booking> RoomBooking { get; set; }
+        public DbSet<Tour> Tours { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
 		{
@@ -105,6 +106,11 @@ namespace ccse_cw1.Services
                 tempId += 1;
                 room.Id = tempId;
                 builder.Entity<Room>().HasData(room);
+            }
+
+            foreach (var tour in TourSeedData.Tours)
+            {
+                builder.Entity<Tour>().HasData(tour);
             }
 
         }
