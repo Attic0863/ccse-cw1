@@ -32,11 +32,16 @@ namespace ccse_cw1.Controllers
             return Ok(await _context.Tours.ToListAsync());
         }
 
-        [HttpGet]
+        [HttpGet("availabletours")]
         public async Task<ActionResult<IEnumerable<Tour>>> GetAvailableTours()
         {
             var availableTours = new List<Tour>();
-            var avaiableTours = await _context.Tours.Where(t => t.IsAvailable() == true).ToListAsync();
+
+            foreach (var tour in await _context.Tours.ToListAsync())
+            {
+                if (tour.IsAvailable())
+                    availableTours.Add(tour);
+            }
 
             if (availableTours.Any())
             {
