@@ -21,7 +21,7 @@ namespace ccse_cw1.Models
 
         public required int MaxSpaces { get; set; }
 
-        public ICollection<Tour_Booking> TourBookings { get; set; } = new List<Tour_Booking>();
+        public virtual  ICollection<Tour_Booking> TourBookings { get; set; } = new List<Tour_Booking>();
 
         // calculate if a tour is available
         public bool IsAvailable()

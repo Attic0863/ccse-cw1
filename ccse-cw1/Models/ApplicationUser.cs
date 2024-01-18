@@ -15,6 +15,6 @@ namespace ccse_cw1.Models
 
         public string CustomerNo { get; set; } = "";
         public DateTime RegistrationDate { get; set; }
-		public ICollection<Booking>? Bookings { get; set; }
+		public virtual ICollection<Booking>? Bookings { get; set; }
 	}
 }

@@ -13,10 +13,10 @@ namespace ccse_cw1.Models
 
         [ForeignKey("Room_Booking")]
         public int? RoomBookingId { get; set; }
-        public Room_Booking? RoomBooking { get; set; } // navigator
+        public virtual Room_Booking? RoomBooking { get; set; } // navigator
 
         [ForeignKey("Tour_Booking")]
         public int? TourBookingId { get; set; }
-        public Tour_Booking? TourBooking { get; set; } // navigator
+        public virtual Tour_Booking? TourBooking { get; set; } // navigator
     }
 }

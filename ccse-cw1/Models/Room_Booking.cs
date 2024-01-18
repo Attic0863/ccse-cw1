@@ -19,11 +19,11 @@ namespace ccse_cw1.Models
 
         public required DateTime CheckOutDate { get; set; }
 
-        // navigators
-        public Booking? Booking { get; set; }
+        // virtual navigators, they are virtual for lazy loading
+        public virtual Booking? Booking { get; set; }
 
-        public Room? Room { get; set; }
+        public virtual Room? Room { get; set; }
 
-        public Discount? Discount { get; set; }
+        public virtual Discount? Discount { get; set; }
     }
 }

@@ -17,12 +17,12 @@ namespace ccse_cw1.Models
 
         [ForeignKey("Booking")]
         public int BookingId { get; set; }
-        public required Booking Booking { get; set; }
+        public virtual required Booking Booking { get; set; }
 
         [ForeignKey("Tour")]
         public int TourId { get; set; }
-        public required Tour Tour { get; set; }
+        public virtual required Tour Tour { get; set; }
 
-        public Discount? Discount { get; set; }
+        public virtual Discount? Discount { get; set; }
     }
 }

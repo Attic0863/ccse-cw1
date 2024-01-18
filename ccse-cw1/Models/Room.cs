@@ -19,9 +19,9 @@ namespace ccse_cw1.Models
         [ForeignKey("Hotel")]
         public required int HotelId { get; set; }
 
-        public Hotel? Hotel { get; set; }
+        public virtual Hotel? Hotel { get; set; }
 
-        public ICollection<Room_Booking> RoomBookings { get; set; } = new List<Room_Booking>(); // navigator
+        public virtual ICollection<Room_Booking> RoomBookings { get; set; } = new List<Room_Booking>(); // navigator
 
         public bool IsAvailable(DateTime checkInDate, DateTime checkOutDate)
         {
