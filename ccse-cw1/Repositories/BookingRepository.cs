@@ -12,6 +12,14 @@ namespace ccse_cw1.Repositories
         {
             _context = context;
         }
+
+        public List<Booking> GetBookingsFromUser(string userId)
+        {
+            var bookingsList = _context.Booking.Where(b => b.UserId == userId).ToList();
+
+            return bookingsList;
+        }
+
         private async Task<List<Room>> GetAvailableRoomsAsync(int hotelId, string roomtype, DateTime startDate, DateTime endDate, int amount = 1)
         {
             var AvailableRooms = new List<Room>();

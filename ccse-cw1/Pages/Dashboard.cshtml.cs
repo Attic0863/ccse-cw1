@@ -13,18 +13,19 @@ namespace ccse_cw1.Pages
     public class DashboardModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly UserRepository _userRepository;
+        private readonly BookingRepository _bookingRepository;
 
         public ICollection<Booking>? bookings;
 
-        public DashboardModel(UserManager<ApplicationUser> userManager, UserRepository userRepository)
+        public DashboardModel(UserManager<ApplicationUser> userManager, BookingRepository bookingRepository)
         {
             _userManager = userManager;
-            _userRepository = userRepository;
+            _bookingRepository = bookingRepository;
         }
         public async Task OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            bookings = _bookingRepository.GetBookingsFromUser(user.Id);
             // todo: get bookings from user or booking repo
         }
 
