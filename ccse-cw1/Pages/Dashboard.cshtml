@@ -49,8 +49,8 @@ else
                             <a id="@($"booking-{booking.Id}")" href="#" class="list-group-item list-group-item-action" onclick="showBooking(this.id)">
                                 <h6 class="mb-1">@Model.GenerateHumanReadableTitle(booking)</h6>
                                 <h7 class="mb-1">@booking.BookingDate</h7><br />
-                                <small>Check-in: @Model.GenerateFirstCheckin(booking)</small>
-                                <small>Check-out: @Model.GenerateLastCheckout(booking)</small>
+                                <small>Check-in: @Model.GenerateFirstCheckin(booking).ToString("yyyy-MM-dd")</small>
+                                <small>Check-out: @Model.GenerateLastCheckout(booking).ToString("yyyy-MM-dd")</small>
                                 <small>Total Price: $@booking.TotalPrice</small>
                             </a>
                         }
@@ -68,7 +68,7 @@ else
                     {
                         decimal totalDiscount = 0;
 
-                        <section id="booking-@booking.Id-details" class="booking-section">
+                        <section id="booking-@booking.Id-details" class="booking-section" style="display: none">
                             <table>
                                 <tr>
                                     <th>Booking Type</th>
@@ -175,15 +175,13 @@ else
         });
 
         document.querySelectorAll('.booking-section').forEach(section => {
-            section.classList.remove('visible');
-            section.classList.add('invisible');
+            section.style.display = 'none';
         });
 
         // css to change for the selected booking
         document.getElementById(bookingId).classList.add('active');
 
         var bookingIdDetails = bookingId + "-details";
-        document.getElementById(bookingIdDetails).classList.remove('invisible');
-        document.getElementById(bookingIdDetails).classList.add('visible');
+        document.getElementById(bookingIdDetails).style.display = 'block';
     }
 </script>
