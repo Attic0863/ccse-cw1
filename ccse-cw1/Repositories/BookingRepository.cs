@@ -38,6 +38,8 @@ namespace ccse_cw1.Repositories
             return AvailableRooms;
         }
 
+
+
         public async Task<Booking> CreateRoomBooking(string userId, DateTime checkindate, DateTime checkoutdate, string roomtype, int hotelid)
         {
             var booking = new Booking
@@ -50,6 +52,7 @@ namespace ccse_cw1.Repositories
             var availableRooms = await GetAvailableRoomsAsync(hotelid, roomtype, checkindate, checkoutdate);
             if (availableRooms != null)
             {
+                var selectedRoom = availableRooms.FirstOrDefault();
                 booking.UserId = userId;
 
                 var roombooking = new Room_Booking
@@ -57,8 +60,10 @@ namespace ccse_cw1.Repositories
                     CheckInDate = checkindate,
                     CheckOutDate = checkoutdate,
                     Booking = booking,
-                    RoomId = availableRooms.FirstOrDefault().Id,
+                    RoomId = selectedRoom.Id,
                 };
+
+                booking.TotalPrice += selectedRoom.Price;
 
                 _context.Booking.Add(booking);
                 _context.RoomBooking.Add(roombooking);
