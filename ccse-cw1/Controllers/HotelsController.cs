@@ -49,8 +49,7 @@ namespace ccse_cw1.Controllers
                 return BadRequest();
             }
 
-            // use .include to ensure that the rooms navigator is included in the hotel object
-            var hotels = await _context.Hotels.Include(h => h.Rooms).ToListAsync();
+            var hotels = await _context.Hotels.ToListAsync();
 
             foreach (var hotel in hotels)
             {
