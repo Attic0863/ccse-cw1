@@ -25,8 +25,8 @@ namespace ccse_cw1.Pages
         public async Task OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            bookings = _bookingRepository.GetBookingsFromUser(user.Id);
-            // todo: get bookings from user or booking repo
+            if (user != null)
+                bookings = _bookingRepository.GetBookingsFromUser(user.Id);
         }
 
         public DateTime GenerateFirstCheckin(Booking booking)

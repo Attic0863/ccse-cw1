@@ -25,20 +25,108 @@ namespace ccse_cw1.Repositories
             var AvailableRooms = new List<Room>();
 
             var hotel = await _context.Hotels.Include(h => h.Rooms).FirstOrDefaultAsync(h => h.Id == hotelId);
-            var hotelRooms = hotel.Rooms;
-
-            foreach (var room in hotelRooms)
+            if (hotel != null)
             {
-                if (room.RoomType == roomtype && room.IsAvailable(startDate, endDate))
+                var hotelRooms = hotel.Rooms;
+
+                foreach (var room in hotelRooms)
                 {
-                    AvailableRooms.Add(room);
+                    if (room.RoomType == roomtype && room.IsAvailable(startDate, endDate))
+                    {
+                        AvailableRooms.Add(room);
+                    }
                 }
             }
 
             return AvailableRooms;
         }
 
+        public async Task<Booking> CreateBooking(DateTime checkindate, DateTime checkoutdate, DateTime tourcheckin, string userId, int hotelid = 0, int tourid = 0, string roomtype = "")
+        {
+            var booking = new Booking
+            {
+                UserId = "-1",
+                BookingDate = DateTime.Now,
 
+            };
+
+            // hotel booking
+            if (hotelid != 0 && tourid ==  0)
+            {
+                booking = await CreateRoomBooking(userId, checkindate, checkoutdate, roomtype, hotelid);
+
+                _context.Booking.Add(booking);
+                foreach (var roombooking in booking.RoomBookings)
+                {
+                    _context.RoomBooking.Add(roombooking);
+                }
+
+            } // both booking
+            else if (hotelid != 0 && tourid != 0)
+            {
+                booking = await CreateRoomBooking(userId, checkindate, checkoutdate, roomtype, hotelid);
+
+                var tourbooking = await CreateTourBooking(userId, tourcheckin, tourid);
+                tourbooking.TourBooking.Booking = booking;
+
+                _context.Booking.Add(booking);
+                foreach (var roombooking in booking.RoomBookings)
+                {
+                    _context.RoomBooking.Add(roombooking);
+                }
+                _context.TourBooking.Add(booking.TourBooking);
+
+            }
+            else // tour only booking
+            {
+                booking = await CreateTourBooking(userId, tourcheckin, tourid);
+
+                _context.Booking.Add(booking);
+                _context.TourBooking.Add(booking.TourBooking);
+            }
+
+            await _context.SaveChangesAsync();
+            return booking;
+        }
+
+        public async Task<Booking> CreateTourBooking(string userId, DateTime checkin, int tourid)
+        {
+            var booking = new Booking
+            {
+                UserId = "-1",
+                BookingDate = DateTime.Now,
+
+            };
+
+            var tour = await _context.Tours.FirstOrDefaultAsync(t => t.Id == tourid);
+            if (tour != null)
+            {
+                if (tour.IsAvailable())
+                {
+                    booking.UserId = userId;
+
+                    var tourbooking = new Tour_Booking
+                    {
+                        CheckInDate = checkin,
+                        CheckOutDate = checkin.AddDays(tour.Duration),
+                        Booking = booking,
+                        Tour = tour,
+                        TourId = tourid,
+                    };
+
+                    booking.TotalPrice += tour.Price;
+
+                    _context.Booking.Add(booking);
+                    _context.TourBooking.Add(tourbooking);
+
+                    await _context.SaveChangesAsync();
+
+                    return booking;
+                }
+            }
+            return booking;
+        }
+        
 
         public async Task<Booking> CreateRoomBooking(string userId, DateTime checkindate, DateTime checkoutdate, string roomtype, int hotelid)
         {
@@ -53,28 +141,29 @@ namespace ccse_cw1.Repositories
             if (availableRooms != null)
             {
                 var selectedRoom = availableRooms.FirstOrDefault();
-                booking.UserId = userId;
-
-                var roombooking = new Room_Booking
+                if (selectedRoom != null)
                 {
-                    CheckInDate = checkindate,
-                    CheckOutDate = checkoutdate,
-                    Booking = booking,
-                    RoomId = selectedRoom.Id,
-                };
+                    booking.UserId = userId;
 
-                booking.TotalPrice += selectedRoom.Price;
+                    var roombooking = new Room_Booking
+                    {
+                        CheckInDate = checkindate,
+                        CheckOutDate = checkoutdate,
+                        Booking = booking,
+                        RoomId = selectedRoom.Id,
+                    };
 
-                _context.Booking.Add(booking);
-                _context.RoomBooking.Add(roombooking);
+                    booking.TotalPrice += selectedRoom.Price;
 
-                await _context.SaveChangesAsync();
+                    _context.Booking.Add(booking);
+                    _context.RoomBooking.Add(roombooking);
 
-                return booking;
+                    await _context.SaveChangesAsync();
+
+                    return booking;
+                }
             }
-
             return booking;
-
         }
            
 

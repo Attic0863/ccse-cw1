@@ -27,39 +27,34 @@ namespace ccse_cw1.Pages
         // define the model which will be used for data transfer
         public class InputModel
         {
-            [Required(ErrorMessage = "A valid Checkin date is required")]
+            // tour variables
+            public int TourId { get; set; } = 0;
+            public DateTime TourStartDate { get; set; } = DateTime.MinValue;
+
+            // hotel variables
             public DateTime CheckInDate { get; set; }
-
-            [Required(ErrorMessage = "A valid Checkout is required")]
             public DateTime CheckOutDate { get; set; }
-
-            [Required(ErrorMessage = "HotelId is required")]
-            public int HotelId { get; set; }
-
-            [Required(ErrorMessage = "Please pick a type of room")]
-            public string RoomType { get; set; }
-
-            [Required(ErrorMessage = "Amount is required")]
+            public int HotelId { get; set; } = 0;
+            public string RoomType { get; set; } = "Single";
             public int Amount { get; set; }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
             var user = await _userManager.GetUserAsync(User);
-
-            var booking = await _BookingRepository.CreateRoomBooking(user.Id, Input.CheckInDate, Input.CheckOutDate, Input.RoomType, Input.HotelId);
-            if (booking.UserId == "-1")
+            
+            if (user != null)
             {
+                // TODO: being able to book multiple rooms
+                var booking = await _BookingRepository.CreateBooking(Input.CheckInDate, Input.CheckOutDate, Input.TourStartDate, user.Id, Input.HotelId, Input.TourId, Input.RoomType);
+                if (booking.UserId != "-1")
+                {
+                    return RedirectToPage("/BookingSuccess");
+                }
 
             }
 
-            return RedirectToPage("/SuccessPage");
-
+            return RedirectToPage("/BookingFail");
         }
     }
 }

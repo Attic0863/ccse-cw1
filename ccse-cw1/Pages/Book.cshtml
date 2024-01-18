@@ -14,7 +14,43 @@
     }
 </style>
 
-<div class="container mt-5">
+<div id="tourask">
+    <h3 class="mb-2">Would you like to book a tour?</h3>
+
+    <div class="mt-1 mb-3">
+        <button type="button" class="btn btn-primary" id="yesButton" onclick="fetchToursData()">Yes</button>
+        <button type="button" class="btn btn-secondary" id="noButton">No</button>
+    </div>
+</div>
+
+<div id="toursearchResults" style="overflow-x: auto; display: none;" class="mt-3">
+
+</div>
+
+<form id="book" method="post">
+    <div id="tourdateInput" style="display:none;" class="mt-1 mb-2">
+        <div class="form-group">
+            <label for="startDate">Start date:</label>
+            <div>
+                <input type="date" class="form-control" id="tourStartDate" asp-for="Input.TourStartDate" />
+            </div>
+        </div>
+    </div>
+
+    <div id="hotelask" class="mb-2 mt-1" style="display:none;">
+        <h3>Would you like to book a room in a hotel?</h3>
+            <input id="TourIdInput1" style="display:none" asp-for="Input.TourId" />
+            <div class="mt-1 mb-3">
+                <button type="button" class="btn btn-primary" id="yesButton" onclick="showBooking()">Yes</button>
+                <button type="submit" class="btn btn-secondary" id="noButton">No. Book my tour</button>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+    </div>
+</form>
+
+
+<div id="hotelbookingsystem" class="container mt-5" style="display:none;">
+
     <h3 class="mb-2">Search through Hotels</h3>
     <div id="bookingSystem">
         <div id="searchForm" class="mt-3">
@@ -55,7 +91,11 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="mb-3">  
                     <input id="HotelIdInput" style="display:none" asp-for="Input.HotelId" />
-                    <span asp-validation-for="Input.HotelId" class="text-danger"></span>
+                    <input id="TourIdInput" style="display:none" asp-for="Input.TourId" />
+                    <label for="startDate">Tour Start date:</label>
+                    <div>
+                        <input type="date" class="form-control" id="tourStartDate" asp-for="Input.TourStartDate" />
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Type of Room:</label>
@@ -91,7 +131,7 @@
                 </div>
                 <div class="row mb-3">
                     <div class="col d-grid">
-                        <button type="submit" class="btn btn-primary">Log in</button>
+                        <button id="bookbutton" type="submit" class="btn btn-primary">Book</button>
                     </div>
                     <div class="col d-grid">
                         <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
@@ -104,6 +144,11 @@
 </div>
 
 <script>
+    function showBooking()
+    {
+        document.getElementById("hotelbookingsystem").style.display = 'block';
+    }
+
     // used to check for search type
     var searchtype = "all";
 
@@ -123,6 +168,12 @@
             searchtype = "all";
             dateInput.style.display = 'none';
         }
+    });
+
+    // ensure that tour start date is set when changed
+    document.getElementById('tourStartDate').addEventListener('change', function () {
+        document.getElementById("hotelask").style.display = 'block';
+
     });
 
     // remove or hide items which should not be displayed
@@ -180,12 +231,58 @@
         searchResultsContainer.appendChild(card);
     }
 
+    // js function to create a card for each tour
+    function createTourBox(tour) {
+        const searchResultsContainer = document.getElementById("toursearchResults");
+
+        const card = document.createElement("div");
+        card.id = tour.id;
+        card.className = "card";
+        card.style = "width: 30%; height: 40%m; margin: 10px;";
+
+        const cardBody = document.createElement("div");
+        cardBody.className = "card-body";
+        cardBody.style = "display: flex; flex-direction: column; overflow: hidden;";
+
+
+        const title = document.createElement("h5");
+        title.className = "card-title";
+        title.textContent = tour.name;
+
+        const duration = document.createElement("p");
+        duration.className = "card-text";
+        duration.textContent = "Duration: " + tour.duration;
+
+        const description = document.createElement("p");
+        description.className = "card-text";
+        description.textContent = "Description: " + (tour.description ?? "Unavailable");
+        description.style = "white-space: normal;";
+
+        const selectButton = document.createElement("button");
+        selectButton.className = "btn btn-primary";
+        selectButton.textContent = "Select for Booking";
+        selectButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            selectTour(tour);
+        });
+
+        cardBody.appendChild(title);
+        cardBody.appendChild(duration);
+        cardBody.appendChild(description);
+        cardBody.appendChild(selectButton);
+
+        card.appendChild(cardBody);
+
+        searchResultsContainer.appendChild(card);
+    }
+
     function renderHotelBoxes(hotelsData) {
         clearMenu()
         hotelsData.forEach(createHotelBox);
     }
 
     function fetchHotelData() {
+        document.getElementById("noButton").style.display = 'none';
         if (searchtype == "all") {
             fetch('/api/Hotels/', {
                 method: 'GET',
@@ -227,10 +324,48 @@
     function selectHotel(hotel) {
         document.getElementById("finalbookingForm").classList.remove("invisible");
         document.getElementById("HotelIdInput").value = hotel.id;
+    }
 
-        if (searchtype == "all") {
-            var dateInput = document.getElementById('dateInput');
-            var searchResultsDiv = document.getElementById('searchResults');
+    function selectTour(tour) 
+    {
+        document.getElementById("TourIdInput1").value = tour.id;
+        document.getElementById("TourIdInput").value = tour.id;
+        document.getElementById("tourdateInput").style.display = 'block';
+    }
+
+    document.getElementById('yesButton').addEventListener('click', function () {
+        document.getElementById('noButton').style.display = 'none';
+        document.getElementById('toursearchResults').style.display = 'block';
+    });
+
+    document.getElementById('noButton').addEventListener('click', function () {
+        document.getElementById('hotelbookingsystem').style.display = 'block';
+        document.getElementById('tourask').style.display = 'none';
+    });
+
+    function fetchToursData() {
+        fetch('/api/tours/AvailableTours/', {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {
+            renderTours(data);
+        })
+        .catch(error => {
+            console.error('Error fetching tour data:', error);
+        });
+    }
+
+    function renderTours(toursData) {
+        const searchResultsContainer = document.getElementById("toursearchResults");
+        while (searchResultsContainer.firstChild) {
+            searchResultsContainer.removeChild(searchResultsContainer.firstChild);
         }
+
+        toursData.forEach(createTourBox);
+    }
+
+    function BookTour() {
+        document.getElementById("bookbutton").click();
     }
 </script>
