@@ -41,7 +41,7 @@ namespace ccse_cw1.Repositories
             return AvailableRooms;
         }
 
-        public async Task<Booking> CreateBooking(DateTime checkindate, DateTime checkoutdate, DateTime tourcheckin, string userId, int hotelid = 0, int tourid = 0, string roomtype = "")
+        public async Task<Booking> CreateBooking(DateTime checkindate, DateTime checkoutdate, DateTime tourcheckin, string userId, int hotelid = 0, int tourid = 0, string roomtype = "", int amount = 1)
         {
             var booking = new Booking
             {
@@ -53,7 +53,7 @@ namespace ccse_cw1.Repositories
             // hotel booking
             if (hotelid != 0 && tourid ==  0)
             {
-                booking = await CreateRoomBooking(userId, checkindate, checkoutdate, roomtype, hotelid);
+                booking = await CreateRoomBooking(userId, checkindate, checkoutdate, roomtype, hotelid, amount);
 
                 _context.Booking.Add(booking);
                 foreach (var roombooking in booking.RoomBookings)
@@ -64,7 +64,7 @@ namespace ccse_cw1.Repositories
             } // both booking
             else if (hotelid != 0 && tourid != 0)
             {
-                booking = await CreateRoomBooking(userId, checkindate, checkoutdate, roomtype, hotelid);
+                booking = await CreateRoomBooking(userId, checkindate, checkoutdate, roomtype, hotelid, amount);
 
                 var tourbooking = await CreateTourBooking(userId, tourcheckin, tourid);
                 tourbooking.TourBooking.Booking = booking;
@@ -119,7 +119,8 @@ namespace ccse_cw1.Repositories
                 _context.Booking.Add(booking);
             }
 
-            await _context.SaveChangesAsync();
+            if (booking.UserId != "-1")
+                await _context.SaveChangesAsync();
             return booking;
         }
 
@@ -159,7 +160,7 @@ namespace ccse_cw1.Repositories
         }
         
 
-        public async Task<Booking> CreateRoomBooking(string userId, DateTime checkindate, DateTime checkoutdate, string roomtype, int hotelid)
+        public async Task<Booking> CreateRoomBooking(string userId, DateTime checkindate, DateTime checkoutdate, string roomtype, int hotelid, int amount)
         {
             var booking = new Booking
             {
@@ -171,26 +172,34 @@ namespace ccse_cw1.Repositories
             var availableRooms = await GetAvailableRoomsAsync(hotelid, roomtype, checkindate, checkoutdate);
             if (availableRooms != null)
             {
-                var selectedRoom = availableRooms.FirstOrDefault();
-                if (selectedRoom != null)
+                if (availableRooms.Count < amount)
                 {
-                    booking.UserId = userId;
-
-                    var roombooking = new Room_Booking
-                    {
-                        CheckInDate = checkindate,
-                        CheckOutDate = checkoutdate,
-                        Booking = booking,
-                        RoomId = selectedRoom.Id,
-                        Room = selectedRoom,
-                    };
-
-                    booking.RoomBookings.Add(roombooking);
-
-                    booking.TotalPrice += selectedRoom.Price * (checkoutdate - checkindate).Days;
-
                     return booking;
                 }
+
+                for (var x = 0; x < amount; x++)
+                {
+                    var selectedRoom = availableRooms[x];
+                    if (selectedRoom != null)
+                    {
+                        booking.UserId = userId;
+
+                        var roombooking = new Room_Booking
+                        {
+                            CheckInDate = checkindate,
+                            CheckOutDate = checkoutdate,
+                            Booking = booking,
+                            RoomId = selectedRoom.Id,
+                            Room = selectedRoom,
+                        };
+
+                        booking.RoomBookings.Add(roombooking);
+
+                        booking.TotalPrice += selectedRoom.Price * (checkoutdate - checkindate).Days;
+                    }
+                }
+
+                return booking;
             }
             return booking;
         }

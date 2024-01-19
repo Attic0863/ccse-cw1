@@ -36,7 +36,7 @@ namespace ccse_cw1.Pages
             public DateTime CheckOutDate { get; set; }
             public int HotelId { get; set; } = 0;
             public string RoomType { get; set; } = "Single";
-            public int Amount { get; set; }
+            public int Amount { get; set; } = 1;
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -46,7 +46,7 @@ namespace ccse_cw1.Pages
             if (user != null)
             {
                 // TODO: being able to book multiple rooms
-                var booking = await _BookingRepository.CreateBooking(Input.CheckInDate, Input.CheckOutDate, Input.TourStartDate, user.Id, Input.HotelId, Input.TourId, Input.RoomType);
+                var booking = await _BookingRepository.CreateBooking(Input.CheckInDate, Input.CheckOutDate, Input.TourStartDate, user.Id, Input.HotelId, Input.TourId, Input.RoomType, Input.Amount);
                 if (booking.UserId != "-1")
                 {
                     return RedirectToPage("/BookingSuccess");
