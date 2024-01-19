@@ -92,9 +92,11 @@
                 <div class="mb-3">  
                     <input id="HotelIdInput" style="display:none" asp-for="Input.HotelId" />
                     <input id="TourIdInput" style="display:none" asp-for="Input.TourId" />
-                    <label for="startDate">Tour Start date:</label>
-                    <div>
-                        <input min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" id="tourStartDate" asp-for="Input.TourStartDate" />
+                    <div id="tourfinalbookinginfo">
+                        <label for="startDate">Tour Start date:</label>
+                        <div>
+                            <input min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" id="tourStartDate" asp-for="Input.TourStartDate" />
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -119,13 +121,13 @@
                     <div class="mb-3">
                         <label for="CheckInDate">Checkin date:</label>
                         <label asp-for="Input.CheckInDate" class="form-label">
-                            <input min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" asp-for="Input.CheckInDate" />
+                            <input min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" asp-for="Input.CheckInDate" onchange=""/>
                         </label>
                     </div>
                     <div class="mb-3">
                         <label for="CheckOutDate">Checkout date:</label>
                         <label asp-for="Input.CheckOutDate" class="form-label">
-                            <inputmin="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" asp-for="Input.CheckOutDate" />
+                            <input min="@DateTime.Now.ToString("yyyy-MM-dd")" type="date" class="form-control" asp-for="Input.CheckOutDate" />
                         </label>
                     </div>
                 </div>
@@ -341,6 +343,7 @@
     document.getElementById('noButton').addEventListener('click', function () {
         document.getElementById('hotelbookingsystem').style.display = 'block';
         document.getElementById('tourask').style.display = 'none';
+        document.getElementById('tourfinalbookinginfo').style.display = 'none';
     });
 
     function fetchToursData() {
@@ -367,5 +370,9 @@
 
     function BookTour() {
         document.getElementById("bookbutton").click();
+    }
+
+    function DateChanged() {
+
     }
 </script>

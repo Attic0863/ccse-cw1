@@ -29,7 +29,18 @@ namespace ccse_cw1.Controllers
             {
                 return NotFound();
             }
-            return Ok(await _context.Hotels.ToListAsync());
+            var hotels = await _context.Hotels.ToListAsync();
+
+            // data transfer object
+            var hotelsDTO = hotels.Select(hotel => new
+            {
+                hotel.Id,
+                hotel.Name,
+                hotel.Description,
+                hotel.Operator,
+                // Excluded the rooms
+            }).ToList();
+            return Ok(hotelsDTO);
         }
 
         public class DateRangeModel

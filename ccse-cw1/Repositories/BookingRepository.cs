@@ -187,7 +187,7 @@ namespace ccse_cw1.Repositories
 
                     booking.RoomBookings.Add(roombooking);
 
-                    booking.TotalPrice += selectedRoom.Price;
+                    booking.TotalPrice += selectedRoom.Price * (checkoutdate - checkindate).Days;
 
                     return booking;
                 }
