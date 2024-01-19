@@ -72,7 +72,6 @@ else
                                     <th>Booking Type</th>
                                     <th>Details</th>
                                     <th>Cost</th>
-                                    <th>Buttons</th>
                                 </tr>
 
                                 @if (booking.RoomBookings != null)
@@ -92,10 +91,6 @@ else
                                                 <strong>Check-out Date:</strong> @roomBooking.CheckOutDate.ToString("yyyy-MM-dd")
                                             </td>
                                             <td>$@roomBooking.Room.Price</td>
-                                            <td>
-                                                <button class="btn btn-secondary" onclick="modifyBooking(@roomBooking.Id)">Modify</button>
-                                                <button class="btn btn-danger" onclick="cancelBooking(@roomBooking.Id)">Cancel</button>
-                                            </td>
                                         </tr>
                                     }
                                 }
@@ -106,14 +101,10 @@ else
                                         <td>Tour Booking</td>
                                         <td>
                                             <strong>Tour:</strong> @booking.TourBooking.Tour.Name<br>
-                                            <strong>Location:</strong> @booking.TourBooking.Tour.Description<br>
-                                            <strong>Duration:</strong> @booking.TourBooking.Tour.Duration
+                                            <strong>Description:</strong> @(booking.TourBooking.Tour.Description)<br>
+                                            <strong>Duration:</strong> @booking.TourBooking.Tour.Duration Days
                                         </td>
                                         <td>$@booking.TourBooking.Tour.Price</td>
-                                        <td>
-                                            <button class="btn btn-secondary" onclick="modifyBooking(@booking.TourBookingId)">Modify</button>
-                                            <button class="btn btn-danger" onclick="cancelBooking(@booking.TourBookingId)">Cancel</button>
-                                        </td>
                                     </tr>
                                 }
 
@@ -130,6 +121,14 @@ else
                             @if (!booking.Confirmed)
                             {
                                 <button class="btn btn-success" onclick="payBooking(@booking.Id)">Pay</button>
+                            }
+                            @if (booking.CanModify)
+                            {
+                                <button class="btn btn-secondary" onclick="modifyBooking(@booking.TourBookingId)">Modify</button>
+                            }
+                            @if (booking.CanCancel)
+                            {
+                                <button class="btn btn-danger" onclick="cancelBooking(@booking.TourBookingId)">Cancel</button>
                             }
                         </section>
                     }

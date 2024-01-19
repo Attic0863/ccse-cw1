@@ -30,5 +30,8 @@ namespace ccse_cw1.Models
 
         public double TotalPrice { get; set; }
 
+        // booleans to check
+        public bool CanModify => (BookingDate - DateTime.Now).TotalDays > 14;
+        public bool CanCancel => (BookingDate - DateTime.Now).TotalDays > 5;
     }
 }
