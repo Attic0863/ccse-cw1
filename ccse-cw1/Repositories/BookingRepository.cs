@@ -13,14 +13,27 @@ namespace ccse_cw1.Repositories
             _context = context;
         }
 
-        public async Task<List<Booking>> GetBookingsAsync()
+        public List<Booking> GetBookings()
         {
-            var bookings = await _context.Booking.ToListAsync();
+            var bookings = _context.Booking.ToList();
 
             return bookings;
         }
+        public List<Hotel> GetHotels()
+        {
+            var hotels = _context.Hotels.ToList();
 
-            public async Task<Booking> CancelBooking(int bookingId)
+            return hotels;
+        }
+
+        public List<Tour> GetTours()
+        {
+            var tours = _context.Tours.ToList();
+
+            return tours;
+        }
+
+        public async Task<Booking> CancelBooking(int bookingId)
         {
             var booking = await _context.Booking.FirstOrDefaultAsync(b => b.Id == bookingId);
 
