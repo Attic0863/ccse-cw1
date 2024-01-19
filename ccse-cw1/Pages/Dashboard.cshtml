@@ -58,7 +58,7 @@ else
                                 <h7 class="mb-1">@booking.BookingDate</h7><br />
                                 <small>Check-in: @Model.GenerateFirstCheckin(booking).ToString("yyyy-MM-dd")</small>
                                 <small>Check-out: @Model.GenerateLastCheckout(booking).ToString("yyyy-MM-dd")</small>
-                                <small>Total Price: $@booking.TotalPrice</small>
+                                <small>Total Price: £@booking.TotalPrice</small>
                             </a>
                         }
                     </div>
@@ -97,7 +97,7 @@ else
                                                 <strong>Check-in Date:</strong> @roomBooking.CheckInDate.ToString("yyyy-MM-dd")<br>
                                                 <strong>Check-out Date:</strong> @roomBooking.CheckOutDate.ToString("yyyy-MM-dd")
                                             </td>
-                                            <td>$@roomBooking.Room.Price</td>
+                                            <td>£@(roomBooking.Room?.Price ?? 0)</td>
                                         </tr>
                                     }
                                 }
@@ -111,7 +111,7 @@ else
                                             <strong>Description:</strong> @(booking.TourBooking.Tour.Description)<br>
                                             <strong>Duration:</strong> @booking.TourBooking.Tour.Duration Days
                                         </td>
-                                        <td>$@booking.TourBooking.Tour.Price</td>
+                                        <td>£@booking.TourBooking.Tour.Price</td>
                                     </tr>
                                 }
 
@@ -122,7 +122,14 @@ else
 
                                 <tr class="total-row">
                                     <td><strong>Grand Total:</strong></td>
-                                    <td id="grandTotal">£@booking.TotalPrice</td>
+                                    @if (booking.Cancelled)
+                                    {
+                                        <td id="grandTotal">£50 (Cancellation Fee)</td>                                        
+                                    }
+                                    else
+                                    {
+                                        <td id="grandTotal">£@booking.TotalPrice</td>                                        
+                                    }
                                 </tr>
                             </table>
                             @if (!booking.Confirmed && !booking.Cancelled)

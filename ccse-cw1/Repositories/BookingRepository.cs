@@ -13,7 +13,14 @@ namespace ccse_cw1.Repositories
             _context = context;
         }
 
-        public async Task<Booking> CancelBooking(int bookingId)
+        public async Task<List<Booking>> GetBookingsAsync()
+        {
+            var bookings = await _context.Booking.ToListAsync();
+
+            return bookings;
+        }
+
+            public async Task<Booking> CancelBooking(int bookingId)
         {
             var booking = await _context.Booking.FirstOrDefaultAsync(b => b.Id == bookingId);
 
@@ -26,7 +33,9 @@ namespace ccse_cw1.Repositories
 
             await _context.SaveChangesAsync();
 
+#pragma warning disable CS8603 // Possible null reference return.
             return booking;
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public async Task<Booking> ConfirmBooking(string userId, int bookingId)
@@ -49,7 +58,9 @@ namespace ccse_cw1.Repositories
 
             await _context.SaveChangesAsync();
 
+#pragma warning disable CS8603 // Possible null reference return.
             return booking;
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public List<Booking> GetBookingsFromUser(string userId)
