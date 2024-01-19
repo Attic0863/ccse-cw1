@@ -11,7 +11,7 @@ namespace ccse_cw1.Models
 
         public required string Name { get; set; }
 
-        public int Description { get; set; }
+        public string Description { get; set; } = "";
 
         public required int Price { get; set; }
 

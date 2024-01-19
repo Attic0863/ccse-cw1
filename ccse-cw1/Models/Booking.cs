@@ -20,7 +20,7 @@ namespace ccse_cw1.Models
 
         public virtual ApplicationUser? User { get; set; } // navigator
 
-        public virtual ICollection<Room_Booking>? RoomBookings { get; set; } // navigator
+        public virtual ICollection<Room_Booking> RoomBookings { get; set; } = new List<Room_Booking>(); // navigator
 
         [ForeignKey("Tour_Booking")]
         public int? TourBookingId { get; set; }

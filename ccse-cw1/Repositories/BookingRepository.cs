@@ -68,13 +68,17 @@ namespace ccse_cw1.Repositories
 
                 var tourbooking = await CreateTourBooking(userId, tourcheckin, tourid);
                 tourbooking.TourBooking.Booking = booking;
+                booking.TourBooking = tourbooking.TourBooking;
+
+                booking.TotalPrice += tourbooking.TourBooking.Tour.Price;
+
+                // now we do the discounts
 
                 _context.Booking.Add(booking);
                 foreach (var roombooking in booking.RoomBookings)
                 {
                     _context.RoomBooking.Add(roombooking);
                 }
-                _context.TourBooking.Add(booking.TourBooking);
 
             }
             else // tour only booking
@@ -82,7 +86,6 @@ namespace ccse_cw1.Repositories
                 booking = await CreateTourBooking(userId, tourcheckin, tourid);
 
                 _context.Booking.Add(booking);
-                _context.TourBooking.Add(booking.TourBooking);
             }
 
             await _context.SaveChangesAsync();
@@ -114,12 +117,9 @@ namespace ccse_cw1.Repositories
                         TourId = tourid,
                     };
 
+                    booking.TourBooking = tourbooking;
+
                     booking.TotalPrice += tour.Price;
-
-                    _context.Booking.Add(booking);
-                    _context.TourBooking.Add(tourbooking);
-
-                    await _context.SaveChangesAsync();
 
                     return booking;
                 }
@@ -153,23 +153,14 @@ namespace ccse_cw1.Repositories
                         RoomId = selectedRoom.Id,
                     };
 
+                    booking.RoomBookings.Add(roombooking);
+
                     booking.TotalPrice += selectedRoom.Price;
-
-                    _context.Booking.Add(booking);
-                    _context.RoomBooking.Add(roombooking);
-
-                    await _context.SaveChangesAsync();
 
                     return booking;
                 }
             }
             return booking;
-        }
-           
-
-        private async Task<List<Booking>> CreateMultipleBooking(string userId, List<Booking> bookings)
-        {
-            return new List<Booking>();
         }
     }
 }
