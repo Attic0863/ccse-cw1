@@ -13,6 +13,45 @@ namespace ccse_cw1.Repositories
             _context = context;
         }
 
+        public async Task<Booking> CancelBooking(int bookingId)
+        {
+            var booking = await _context.Booking.FirstOrDefaultAsync(b => b.Id == bookingId);
+
+            if (booking != null)
+            {
+                booking.Cancelled = true;
+
+                _context.Entry(booking).State = EntityState.Modified;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return booking;
+        }
+
+        public async Task<Booking> ConfirmBooking(string userId, int bookingId)
+        {
+            var booking = await _context.Booking.FirstOrDefaultAsync(b => b.Id == bookingId);
+
+            if (booking != null)
+            {
+                booking.Confirmed = true;
+
+                _context.Entry(booking).State = EntityState.Modified;
+
+                //if (booking.UserId == userId)
+                //{
+                //    booking.Confirmed = true;
+
+                //    _context.Entry(booking).State = EntityState.Modified;
+                //}
+            }
+
+            await _context.SaveChangesAsync();
+
+            return booking;
+        }
+
         public List<Booking> GetBookingsFromUser(string userId)
         {
             var bookingsList = _context.Booking.Where(b => b.UserId == userId).ToList();
@@ -67,10 +106,14 @@ namespace ccse_cw1.Repositories
                 booking = await CreateRoomBooking(userId, checkindate, checkoutdate, roomtype, hotelid, amount);
 
                 var tourbooking = await CreateTourBooking(userId, tourcheckin, tourid);
-                tourbooking.TourBooking.Booking = booking;
-                booking.TourBooking = tourbooking.TourBooking;
 
-                booking.TotalPrice += tourbooking.TourBooking.Tour.Price;
+                if (tourbooking.TourBooking != null)
+                {
+                    tourbooking.TourBooking.Booking = booking;
+                    booking.TotalPrice += tourbooking.TourBooking.Tour.Price;
+                }
+
+                booking.TourBooking = tourbooking.TourBooking;
 
                 // now we calculate the discounts
                 // we will use the first room.

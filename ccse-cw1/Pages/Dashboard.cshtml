@@ -47,7 +47,14 @@ else
                         @foreach (var booking in Model.bookings)
                         {
                             <a id="@($"booking-{booking.Id}")" href="#" class="list-group-item list-group-item-action" onclick="showBooking(this.id)">
-                                <h6 class="mb-1">@Model.GenerateHumanReadableTitle(booking)</h6>
+                                @if(booking.Cancelled)
+                                {
+                                    <h6 class="mb-1">Cancelled: @Model.GenerateHumanReadableTitle(booking)</h6>
+                                }
+                                else
+                                {
+                                    <h6 class="mb-1">@Model.GenerateHumanReadableTitle(booking)</h6>
+                                }
                                 <h7 class="mb-1">@booking.BookingDate</h7><br />
                                 <small>Check-in: @Model.GenerateFirstCheckin(booking).ToString("yyyy-MM-dd")</small>
                                 <small>Check-out: @Model.GenerateLastCheckout(booking).ToString("yyyy-MM-dd")</small>
@@ -81,12 +88,12 @@ else
                                         <tr>
                                             <td>Hotel Booking</td>
                                             <td>
-                                                @if (roomBooking.Room.Hotel != null)
+                                                @if (roomBooking.Room?.Hotel != null)
                                                 {
                                                     <strong>Hotel:</strong> @roomBooking.Room.Hotel.Name
                                                     <br>
                                                 }
-                                                <strong>Room Type:</strong> @roomBooking.Room.RoomType<br>
+                                                <strong>Room Type:</strong> @roomBooking.Room?.RoomType<br>
                                                 <strong>Check-in Date:</strong> @roomBooking.CheckInDate.ToString("yyyy-MM-dd")<br>
                                                 <strong>Check-out Date:</strong> @roomBooking.CheckOutDate.ToString("yyyy-MM-dd")
                                             </td>
@@ -118,17 +125,17 @@ else
                                     <td id="grandTotal">£@booking.TotalPrice</td>
                                 </tr>
                             </table>
-                            @if (!booking.Confirmed)
+                            @if (!booking.Confirmed && !booking.Cancelled)
                             {
                                 <button class="btn btn-success" onclick="payBooking(@booking.Id)">Pay</button>
                             }
-                            @if (booking.CanModify)
+                            @if (booking.CanModify && !booking.Cancelled)
                             {
                                 <button class="btn btn-secondary" onclick="modifyBooking(@booking.TourBookingId)">Modify</button>
                             }
-                            @if (booking.CanCancel)
+                            @if (booking.CanCancel() && !booking.Cancelled)
                             {
-                                <button class="btn btn-danger" onclick="cancelBooking(@booking.TourBookingId)">Cancel</button>
+                                <button class="btn btn-danger" onclick="cancelBooking(@booking.Id)">Cancel</button>
                             }
                         </section>
                     }
@@ -141,6 +148,73 @@ else
 }
 
 <script>
+    // output result of cancel api endpoint request
+    function renderCancelResponse(data) {
+        if (data.status == 200) {
+            alert("Successfully canceled booking")
+        }
+        else {
+            alert("booking cancellation failed!")
+        }
+        location.reload();
+    }
+
+    // do request to pay api endpoint
+    function cancelBooking(bookingId) {
+        var input = {
+            BookingId: bookingId
+        };
+
+        fetch('/api/Bookings/Cancel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(input)
+        })
+            .then(data => {
+                renderCancelResponse(data);
+            })
+            .catch(error => {
+                console.error('Error sending cancellation data', error);
+            });
+    }
+
+    // output result of payment api endpoint request
+    function renderPaymentResponse(data)
+    {
+        if (data.status == 200) {
+            alert("Successfully paid for booking")
+        }
+        else
+        {
+            alert("Payment for booking failed!")
+        }
+        location.reload();
+    }
+
+    // do request to pay api endpoint
+    function payBooking(bookingId)
+    {
+        var input = {
+            BookingId: bookingId
+        };
+
+        fetch('/api/Bookings/Pay', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(input)
+        })
+        .then(data => {
+            renderPaymentResponse(data);
+        })
+        .catch(error => {
+            console.error('Error sending payment data', error);
+        });
+    }
+
     function showBooking(bookingId) {
         // revert all css to default
         var links = document.querySelectorAll('.list-group a');

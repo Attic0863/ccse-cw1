@@ -88,7 +88,7 @@ namespace ccse_cw1.Pages
             {
                 if (booking.TourBooking != null && (booking.RoomBookings == null || booking.RoomBookings.Count <= 0))
                 {
-                    return $"{booking.TourBooking.Tour.Name} - {booking.TourBooking.Tour.Duration}";
+                    return $"{booking.TourBooking.Tour.Name} - {booking.TourBooking.Tour.Duration} Days";
                 }
             }
 

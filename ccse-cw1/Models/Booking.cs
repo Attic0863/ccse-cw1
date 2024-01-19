@@ -32,6 +32,26 @@ namespace ccse_cw1.Models
 
         // booleans to check
         public bool CanModify => (BookingDate - DateTime.Now).TotalDays > 14;
-        public bool CanCancel => (BookingDate - DateTime.Now).TotalDays > 5;
+
+        public bool CanCancel()
+        {
+            if (RoomBookings.Any())
+            {
+                if (RoomBookings.All(r => (r.CheckInDate - DateTime.Now).TotalDays > 5))
+                {
+                    return true;
+                }
+            }
+
+            if (TourBooking != null)
+            {
+                if ((TourBooking.CheckInDate - DateTime.Now).TotalDays > 5)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
