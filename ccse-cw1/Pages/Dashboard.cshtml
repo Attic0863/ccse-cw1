@@ -66,8 +66,6 @@ else
                 <div class="mt-4">
                     @foreach (var booking in Model.bookings)
                     {
-                        decimal totalDiscount = 0;
-
                         <section id="booking-@booking.Id-details" class="booking-section" style="display: none">
                             <table>
                                 <tr>
@@ -99,17 +97,6 @@ else
                                                 <button class="btn btn-danger" onclick="cancelBooking(@roomBooking.Id)">Cancel</button>
                                             </td>
                                         </tr>
-
-                                        // add onto the total discount
-                                        totalDiscount += roomBooking.Discount?.Amount ?? 0;
-
-                                        if (roomBooking.Discount != null)
-                                        {
-                                            <tr class="total-row">
-                                                <td><strong>Discount (@roomBooking.Room.RoomType):</strong></td>
-                                                <td>$@roomBooking.Discount.Amount</td>
-                                            </tr>
-                                        }
                                     }
                                 }
 
@@ -128,28 +115,16 @@ else
                                             <button class="btn btn-danger" onclick="cancelBooking(@booking.TourBookingId)">Cancel</button>
                                         </td>
                                     </tr>
-
-                                    // Add tour booking discount to total
-                                    totalDiscount += booking.TourBooking.Discount?.Amount ?? 0;
-
-                                    // Display tour booking discount row
-                                    if (booking.TourBooking.Discount != null)
-                                    {
-                                        <tr class="total-row">
-                                            <td><strong>Discount (Tour):</strong></td>
-                                            <td>$@booking.TourBooking.Discount.Amount</td>
-                                        </tr>
-                                    }
                                 }
 
                                 <tr class="total-row">
                                     <td><strong>Discount:</strong></td>
-                                    <td id="totalDiscountAmount">$@totalDiscount</td>
+                                    <td id="totalDiscountAmount">£@(booking.Discount?.Amount ?? 0)</td>
                                 </tr>
 
                                 <tr class="total-row">
                                     <td><strong>Grand Total:</strong></td>
-                                    <td id="grandTotal">$@booking.TotalPrice</td>
+                                    <td id="grandTotal">£@booking.TotalPrice</td>
                                 </tr>
                             </table>
                             @if (!booking.Confirmed)
