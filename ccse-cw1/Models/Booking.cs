@@ -26,7 +26,9 @@ namespace ccse_cw1.Models
         public int? TourBookingId { get; set; }
         public virtual Tour_Booking? TourBooking { get; set; } // navigator
 
-        public int TotalPrice { get; set; }
+        public virtual Discount? Discount { get; set; } // navigator
+
+        public double TotalPrice { get; set; }
 
     }
 }

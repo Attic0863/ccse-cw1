@@ -54,12 +54,12 @@ namespace ccse_cw1.Services
                 .HasForeignKey(rb => rb.BookingId);
 
             builder.Entity<Discount>()
-                .HasOne(d => d.RoomBooking)
-                .WithOne(rb => rb.Discount);
+                .HasOne(d => d.Booking)
+                .WithOne(b => b.Discount);
 
-            builder.Entity<Discount>()
-                .HasOne(d => d.TourBooking)
-                .WithOne(tb => tb.Discount);
+            builder.Entity<Booking>()
+                .HasOne(b => b.Discount)
+                .WithOne(d => d.Booking);
 
             builder.Entity<Room>()
                 .HasOne(r => r.Hotel)

@@ -23,7 +23,5 @@ namespace ccse_cw1.Models
         public virtual Booking? Booking { get; set; }
 
         public virtual Room? Room { get; set; }
-
-        public virtual Discount? Discount { get; set; }
     }
 }

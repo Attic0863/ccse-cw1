@@ -72,7 +72,38 @@ namespace ccse_cw1.Repositories
 
                 booking.TotalPrice += tourbooking.TourBooking.Tour.Price;
 
-                // now we do the discounts
+                // now we calculate the discounts
+                // we will use the first room.
+                var firstRoomBooking = booking.RoomBookings.FirstOrDefault();
+                if (firstRoomBooking != null)
+                {
+                    var room = firstRoomBooking.Room;
+                    if (room != null)
+                    {
+                        var discountValue = (double)0;
+                        if (room.RoomType == "Single") // 10% discount
+                        { 
+                            discountValue = booking.TotalPrice * 0.1;
+                        }
+                        if (room.RoomType == "Double") // 20% discount
+                        {
+                            discountValue = booking.TotalPrice * 0.2;
+                        }
+                        if (room.RoomType == "FamilySuite") // 10% discount
+                        {
+                            discountValue = booking.TotalPrice * 0.4;
+                        }
+
+                        var newDiscount = new Discount
+                        {
+                            Amount = discountValue,
+                            Booking = booking,
+                        };
+                        booking.TotalPrice -= discountValue;
+                        booking.Discount = newDiscount;
+
+                    }
+                }
 
                 _context.Booking.Add(booking);
                 foreach (var roombooking in booking.RoomBookings)
@@ -151,6 +182,7 @@ namespace ccse_cw1.Repositories
                         CheckOutDate = checkoutdate,
                         Booking = booking,
                         RoomId = selectedRoom.Id,
+                        Room = selectedRoom,
                     };
 
                     booking.RoomBookings.Add(roombooking);
