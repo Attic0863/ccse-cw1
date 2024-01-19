@@ -2,3 +2,176 @@
 @model ManagerDashboardModel
 @{
 }
+
+<style>
+    .booking-section table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    .booking-section th, .booking-section td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .booking-section th {
+        background-color: #f2f2f2;
+    }
+
+    .booking-section button {
+        margin-right: 5px;
+    }
+</style>
+
+@if (Model.Bookings == null || Model.Bookings.Any() == false)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center mt-5">
+                <h3>No bookings have been found on the system.</h3>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 col-lg-2 d-md-block bg-light sidebar">
+                <div class="col-md-10 col-lg-10">
+                    <input type="text" id="bookingFilter" class="form-control mt-3" placeholder="Enter ID">
+                </div>
+                <div class="sidebar-sticky">
+                    <h5 class="text-center mt-3">All User Bookings</h5>
+                    <div class="list-group">
+                        @foreach (var booking in Model.Bookings)
+                        {
+                            <a id="@($"booking-{booking.Id}")" customerid="@booking.User.CustomerNo" href="#" class="list-group-item list-group-item-action" onclick="showBooking(this.id)">
+                                @if (booking.Cancelled)
+                                {
+                                    <h6 class="mb-1"><strong>Cancelled:</strong> ID: @booking.Id</h6>
+                                }
+                                else
+                                {
+                                    <h6 class="mb-1"> ID: @booking.Id</h6>
+                                }
+                                <h7 class="mb-1">@booking.BookingDate</h7><br />
+                                <small>Total Price: £@booking.TotalPrice</small>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 position-relative">
+                <header class="bg-dark bg-gradient rounded text-center p-3 text-white">
+                    <h1>All Bookings</h1>
+                </header>
+
+                <div class="mt-4">
+                    @foreach (var booking in Model.Bookings)
+                    {
+                        <section id="booking-@booking.Id-details" class="booking-section" style="display: none">
+                            <table>
+                                <tr>
+                                    <th>Booking Type</th>
+                                    <th>Details</th>
+                                    <th>Cost (Nightly/Duration)</th>
+                                </tr>
+
+                                @if (booking.RoomBookings != null)
+                                {
+                                    @foreach (var roomBooking in booking.RoomBookings)
+                                    {
+                                        <tr>
+                                            <td>Hotel Booking</td>
+                                            <td>
+                                                @if (roomBooking.Room?.Hotel != null)
+                                                {
+                                                    <strong>Hotel:</strong> @roomBooking.Room.Hotel.Name
+                                                    <br>
+                                                }
+                                                <strong>Room Type:</strong> @roomBooking.Room?.RoomType<br>
+                                                <strong>Check-in Date:</strong> @roomBooking.CheckInDate.ToString("yyyy-MM-dd")<br>
+                                                <strong>Check-out Date:</strong> @roomBooking.CheckOutDate.ToString("yyyy-MM-dd")
+                                            </td>
+                                            <td>£@(roomBooking.Room?.Price ?? 0)</td>
+                                        </tr>
+                                    }
+                                }
+
+                                @if (booking.TourBooking != null)
+                                {
+                                    <tr>
+                                        <td>Tour Booking</td>
+                                        <td>
+                                            <strong>Tour:</strong> @booking.TourBooking.Tour.Name<br>
+                                            <strong>Description:</strong> @(booking.TourBooking.Tour.Description)<br>
+                                            <strong>Duration:</strong> @booking.TourBooking.Tour.Duration Days
+                                        </td>
+                                        <td>£@booking.TourBooking.Tour.Price</td>
+                                    </tr>
+                                }
+
+                                <tr class="total-row">
+                                    <td><strong>Discount:</strong></td>
+                                    <td id="totalDiscountAmount">£@(booking.Discount?.Amount ?? 0)</td>
+                                </tr>
+
+                                <tr class="total-row">
+                                    <td><strong>Grand Total:</strong></td>
+                                    @if (booking.Cancelled)
+                                    {
+                                        <td id="grandTotal">£50 (Cancellation Fee)</td>
+                                    }
+                                    else
+                                    {
+                                        <td id="grandTotal">£@booking.TotalPrice</td>
+                                    }
+                                </tr>
+                            </table>
+                        </section>
+                    }
+                </div>
+            </main>
+
+        </div>
+    </div>
+}
+
+<script>
+    // search through the bookings id or customerid (customer id lets u filter through the start)
+    function filterBookings() {
+        var filterValue = document.getElementById('bookingFilter').value.toLowerCase();
+
+        var bookings = document.querySelectorAll('.list-group-item');
+        bookings.forEach(function (booking) {
+            var bookingId = booking.id.replace('booking-', '');
+            var customerId = booking.getAttribute('customerid') || '';
+            var display = bookingId.includes(filterValue) || (customerId.toLowerCase().startsWith(filterValue) && filterValue.length > 0) ? 'block' : 'none';
+            booking.style.display = display;
+        });
+    }
+
+    document.getElementById('bookingFilter').addEventListener('input', filterBookings);
+
+    function showBooking(bookingId) {
+        // revert all css to default
+        var links = document.querySelectorAll('.list-group a');
+        links.forEach(function (link) {
+            link.classList.remove('active');
+        });
+
+        document.querySelectorAll('.booking-section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // css to change for the selected booking
+        document.getElementById(bookingId).classList.add('active');
+
+        var bookingIdDetails = bookingId + "-details";
+        document.getElementById(bookingIdDetails).style.display = 'block';
+    }
+</script>
