@@ -22,5 +22,8 @@ namespace ccse_cw1.Models
         [ForeignKey("Tour")]
         public int TourId { get; set; }
         public virtual required Tour Tour { get; set; }
+
+        public bool IsValid => (CheckInDate - DateTime.Now).TotalDays > 0;
+
     }
 }
