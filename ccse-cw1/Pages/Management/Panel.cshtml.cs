@@ -3,6 +3,7 @@ using ccse_cw1.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ccse_cw1.Pages.Management
 {
@@ -15,16 +16,37 @@ namespace ccse_cw1.Pages.Management
 
 
         private readonly BookingRepository _bookingRepository;
+
         public ManagerDashboardModel(BookingRepository bookingRepository)
         {
             _bookingRepository = bookingRepository;
+
+            Bookings = _bookingRepository.GetBookings();
+            HotelList = _bookingRepository.GetHotels();
+            Tours = _bookingRepository.GetTours();
         }
 
         public void OnGet()
         {
-            Bookings = _bookingRepository.GetBookings();
-            HotelList = _bookingRepository.GetHotels();
-            Tours = _bookingRepository.GetTours();
+        }
+
+        [BindProperty]
+        public required InputModel Input { get; set; }
+
+        public class InputModel
+        {
+            public DateTime checkindate { get; set; }
+            public DateTime checkoutdate { get; set; }
+        }
+
+        public IActionResult OnPost()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            return Page();
         }
     }
 }

@@ -48,7 +48,7 @@ else
                     <div class="list-group">
                         @foreach (var booking in Model.Bookings)
                         {
-                            <a id="@($"booking-{booking.Id}")" customerid="@booking.User.CustomerNo" href="#" class="list-group-item list-group-item-action" onclick="showBooking(this.id)">
+                            <a id="@($"booking-{booking.Id}")" customerid="@booking.User?.CustomerNo" href="#" class="list-group-item list-group-item-action" onclick="showBooking(this.id)">
                                 @if (booking.Cancelled)
                                 {
                                     <h6 class="mb-1"><strong>Cancelled:</strong> ID: @booking.Id</h6>
@@ -138,6 +138,119 @@ else
             </main>
 
         </div>
+    </div>
+}
+
+@if (Model.HotelList != null)
+{
+    <div class="container mt-4">
+        <h2>Hotel Availability</h2>
+        <form class="mt-3 mb-3" method="post">
+            <div class="mb-3">
+                <label>Checkin date:</label>
+                <input type="date" class="form-control" asp-for="Input.checkindate" />
+            </div>
+            <div class="mb-3">
+                <label>Checkout date:</label>
+                <input type="date" class="form-control" asp-for="Input.checkoutdate" />
+            </div>
+            <button type="submit" class="btn btn-secondary">Is available in that timespan?</button>
+        </form>
+
+        @foreach (var hotel in Model.HotelList)
+        {
+            <h4>@hotel.Name</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Room Type</th>
+                        <th>Available Rooms ( ? / 20 )</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Single Room</td>
+                        @if (Model.Input != null)
+                        {
+                            <td>@hotel.Rooms.Where(h => h.RoomType == "Single" && h.IsAvailable(Model.Input.checkindate, Model.Input.checkoutdate)).ToList().Count</td>
+                        }
+                        else
+                        {
+                            <td>@hotel.Rooms.Where(h => h.RoomType == "Single" && h.IsAvailable(DateTime.Now, DateTime.Now.AddDays(1))).ToList().Count</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Double Room</td>
+                        @if (Model.Input != null)
+                        {
+                            <td>@hotel.Rooms.Where(h => h.RoomType == "Double" && h.IsAvailable(Model.Input.checkindate, Model.Input.checkoutdate)).ToList().Count</td>
+                        }
+                        else
+                        {
+                            <td>@hotel.Rooms.Where(h => h.RoomType == "Double" && h.IsAvailable(DateTime.Now, DateTime.Now.AddDays(1))).ToList().Count</td>
+                        }
+                    </tr>
+                    <tr>
+                        <td>Family Suite</td>
+                        @if (Model.Input != null)
+                        {
+                            <td>@hotel.Rooms.Where(h => h.RoomType == "FamilySuite" && h.IsAvailable(Model.Input.checkindate, Model.Input.checkoutdate)).ToList().Count</td>
+                        }
+                        else
+                        {
+                            <td>@hotel.Rooms.Where(h => h.RoomType == "FamilySuite" && h.IsAvailable(DateTime.Now, DateTime.Now.AddDays(1))).ToList().Count</td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        }
+        
+
+    </div>
+}
+
+@if (Model.Tours != null)
+{
+    <div class="container mt-4">
+        <h2>Tour Availability</h2>
+
+        <form class="mt-3 mb-3" method="post">
+            <div class="mb-3">
+                <label>Checkin date:</label>
+                <input type="date" class="form-control" asp-for="Input.checkindate" />
+            </div>
+            <div class="mb-3">
+                <label>Checkout date:</label>
+                <input type="date" class="form-control" asp-for="Input.checkoutdate" />
+            </div>
+            <button type="submit" class="btn btn-secondary">Is available in that timespan?</button>
+        </form>
+
+        @foreach (var tour in Model.Tours)
+        {
+            <h4>@tour.Name</h4>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Available Spaces ( ? / @tour.MaxSpaces )</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        @if (Model.Input != null)
+                        {
+                            <td>@(tour.MaxSpaces - tour.AmountOfBookings(Model.Input.checkindate, Model.Input.checkoutdate))</td>
+                        }
+                        else
+                        {
+                            <td>@(tour.MaxSpaces - @tour.AmountOfBookings(DateTime.Now, DateTime.Now.AddDays(tour.Duration)))</td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        }
     </div>
 }
 
