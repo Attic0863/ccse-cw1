@@ -109,6 +109,7 @@ else
                                         <td>
                                             <strong>Tour:</strong> @booking.TourBooking.Tour.Name<br>
                                             <strong>Description:</strong> @(booking.TourBooking.Tour.Description)<br>
+                                            <strong>Start Date:</strong> @(booking.TourBooking.CheckInDate.ToString("yyyy-MM-dd"))<br>
                                             <strong>Duration:</strong> @booking.TourBooking.Tour.Duration Days
                                         </td>
                                         <td>£@booking.TourBooking.Tour.Price</td>
