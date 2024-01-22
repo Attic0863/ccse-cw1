@@ -41,13 +41,14 @@ namespace ccse_cw1.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            // get the user
             var user = await _userManager.GetUserAsync(User);
             
             if (user != null)
             {
-                // TODO: being able to book multiple rooms
+                // use the booking repo to send the booking
                 var booking = await _BookingRepository.CreateBooking(Input.CheckInDate, Input.CheckOutDate, Input.TourStartDate, user.Id, Input.HotelId, Input.TourId, Input.RoomType, Input.Amount);
-                if (booking.UserId != "-1")
+                if (booking.UserId != "-1") // check if its a success
                 {
                     return RedirectToPage("/BookingSuccess");
                 }
