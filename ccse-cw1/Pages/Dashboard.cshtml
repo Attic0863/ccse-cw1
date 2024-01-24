@@ -98,6 +98,10 @@ else
                                                 <strong>Check-out Date:</strong> @roomBooking.CheckOutDate.ToString("yyyy-MM-dd")
                                             </td>
                                             <td>£@(roomBooking.Room?.Price ?? 0)</td>
+                                            @if (roomBooking.CheckInDate > DateTime.Now.AddDays(14))
+                                            {
+                                                <td><button class="btn btn-secondary" onclick="modifyBooking(@booking.Id)">Modify</button></td>
+                                            }
                                         </tr>
                                     }
                                 }
@@ -136,10 +140,6 @@ else
                             @if (!booking.Confirmed && !booking.Cancelled)
                             {
                                 <button class="btn btn-success" onclick="payBooking(@booking.Id)">Pay</button>
-                            }
-                            @if (booking.CanModify && !booking.Cancelled)
-                            {
-                                <button class="btn btn-secondary" onclick="modifyBooking(@booking.TourBookingId)">Modify</button>
                             }
                             @if (booking.CanCancel() && !booking.Cancelled)
                             {
@@ -239,5 +239,12 @@ else
 
         var bookingIdDetails = bookingId + "-details";
         document.getElementById(bookingIdDetails).style.display = 'block';
+    }
+
+    function modifyBooking(bookingId) {
+        var url = '/ModifyBooking?bookingId=' + bookingId;
+
+        // redirect to the ModifyBooking page
+        window.location.href = url;
     }
 </script>

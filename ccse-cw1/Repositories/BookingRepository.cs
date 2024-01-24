@@ -1,5 +1,6 @@
 ﻿using ccse_cw1.Controllers;
 using ccse_cw1.Models;
+using ccse_cw1.Pages;
 using ccse_cw1.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +33,49 @@ namespace ccse_cw1.Repositories
 
             return tours;
         }
+
+        public Booking GetBooking(int bookingid)
+        {
+            var booking = _context.Booking.FirstOrDefault(b => b.Id == bookingid);
+
+#pragma warning disable CS8603 // Possible null reference return.
+            return booking;
+#pragma warning restore CS8603 // Possible null reference return.
+        }
+
+        public async Task<Booking> ModifyHotelBooking(int bookingId, DateTime checkin, DateTime checkout)
+        {
+            var booking = GetBooking(bookingId);
+
+            var firstbooking = booking.RoomBookings.FirstOrDefault();
+            if (firstbooking == null || firstbooking.Room == null)
+                return booking;
+
+            if (firstbooking.Room.Hotel != null)
+            {
+                var availableRooms = await GetAvailableRoomsAsync(firstbooking.Room.Hotel.Id, firstbooking.Room.RoomType, checkin, checkout, booking.RoomBookings.Count);
+
+                if (availableRooms.Count >= booking.RoomBookings.Count)
+                {
+                    foreach (var roombooking in booking.RoomBookings)
+                    {
+                        roombooking.CheckInDate = checkin;
+                        roombooking.CheckOutDate = checkout;
+                    }
+                }
+
+                _context.Entry(booking).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+
+                return booking;
+            }
+
+            booking.Id = -1;
+
+            return booking;
+        }
+
 
         public async Task<Booking> CancelBooking(int bookingId)
         {

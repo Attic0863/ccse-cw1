@@ -1,0 +1,29 @@
+﻿@page
+@model ccse_cw1.Pages.ModifyBookingModel
+@{
+}
+
+<h2>Choose a new check in and checkout</h2>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+        <div class="mb-3">
+        <input style="display:none" asp-for="Input.BookingId" value="@Model.Booking.Id" />
+        <label for="CheckInDate">Checkin date:</label>
+            <label asp-for="Input.checkedin" class="form-label">
+                <input id="checkindateid" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" type="date" class="form-control" asp-for="Input.checkedin" />
+            </label>
+        </div>
+        <div class="mb-3">
+            <label for="CheckOutDate">Checkout date:</label>
+            <label asp-for="Input.checkedout" class="form-label">
+                <input id="checkoutdateid" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" type="date" class="form-control" asp-for="Input.checkedout" />
+            </label>
+        </div>
+        <div class="col d-grid">
+            <button type="submit" class="btn btn-primary">Confirm Modification</button>
+        </div>
+        <div class="col d-grid">
+            <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+        </div>
+</form>
