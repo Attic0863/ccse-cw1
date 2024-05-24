@@ -52,7 +52,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --sarif-file-output=snyk-sarif-report.sarif --workdir /home/runner/work/ccse-cw1/ccse-cw1/
+          args: --sarif-file-output=snyk-sarif-report.sarif
 
       - name: Upload result to GitHub
         uses: github/codeql-action/upload-sarif@v3
