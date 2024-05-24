@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - PacificToursWebsite
+name: Deployment Pipeline with DAST SAST for Pacific Tours
 
 on:
   push:
@@ -30,11 +27,15 @@ jobs:
 
       - name: dotnet publish
         run: dotnet publish -c Release
+      
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
       - name: Snyk SAST
-        uses: snyk/actions/dotnet-sast@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        uses: snyk/actions/dotnet@master
         with:
           output: sarif
           outputPath: snyk-sarif-report.sarif
@@ -44,12 +45,6 @@ jobs:
         with:
           sarif_file: snyk-sarif-report.sarif
           category: snyk-sast-analysis
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
