@@ -34,8 +34,10 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Snyk SAST
-        uses: snyk/actions/dotnet@master
+      - name: Snyk .NET SAST
+        uses: snyk/actions/dotnet-sast@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           output: sarif
           outputPath: snyk-sarif-report.sarif
