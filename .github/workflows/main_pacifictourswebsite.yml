@@ -42,7 +42,7 @@ jobs:
         with:
           dotnet-version: '8.x'
           include-prerelease: true
- 
+
       - name: Restore project dependencies
         run: dotnet restore ccse-cw1.sln
         
@@ -52,7 +52,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --sarif-file-output=snyk-sarif-report.sarif
+          args: ccse-cw1.sln --sarif-file-output=snyk-sarif-report.sarif
 
       - name: Upload result to GitHub
         uses: github/codeql-action/upload-sarif@v3
