@@ -99,5 +99,4 @@ jobs:
       - name: OWASP ZAP scan
         uses: zaproxy/action-full-scan@v0.10.0
         with:
-          target: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-          args: -t ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+          target: http://${{ steps.deploy-to-webapp.outputs.webapp-url }}
