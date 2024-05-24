@@ -26,13 +26,13 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}\myapp
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}\myapp
 
   sast:
     runs-on: ubuntu-latest
@@ -53,6 +53,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
+          project: ${{env.DOTNET_ROOT}}\myapp\ccse-cw1\ccse-cw1.csproj
           output: sarif
           outputPath: snyk-sarif-report.sarif
 
@@ -64,7 +65,7 @@ jobs:
 
   deploy:
     runs-on: windows-latest
-    needs: build
+    needs: [build, sast]
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
