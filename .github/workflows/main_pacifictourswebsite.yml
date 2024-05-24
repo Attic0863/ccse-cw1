@@ -91,8 +91,12 @@ jobs:
           slot-name: 'Production'
           package: .
           
-      - name: OWASP ZAP DAST
-        uses: zaproxy/action-full-scan@v0.6.0
+  dast:
+    runs-on: ubuntu-latest
+    needs: deploy
+
+    steps:
+      - name: OWASP ZAP scan
+        uses: zaproxy/action-full-scan@v0.10.0
         with:
           target: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-          cmd_options: '-I'
