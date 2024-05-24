@@ -21,7 +21,7 @@ jobs:
         with:
           dotnet-version: '7.0.x'
           include-prerelease: true
-          
+ 
       - name: Restore project dependencies
         run: dotnet restore
 
@@ -29,7 +29,21 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release
+
+      - name: Snyk SAST
+        uses: snyk/actions/dotnet-sast@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          output: sarif
+          outputPath: snyk-sarif-report.sarif
+
+      - name: Upload result to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk-sarif-report.sarif
+          category: snyk-sast-analysis
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -67,3 +81,8 @@ jobs:
           slot-name: 'Production'
           package: .
           
+      - name: OWASP ZAP DAST
+        uses: zaproxy/action-full-scan@v0.6.0
+        with:
+          target: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+          cmd_options: '-I'
